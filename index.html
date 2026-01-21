@@ -1,82 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MBTI Personality Quiz 2026</title>
-    <style>
-        body { font-family: 'Helvetica', sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 90%; max-width: 450px; text-align: center; }
-        .hidden { display: none !important; }
-        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #4a90e2; background: transparent; color: #4a90e2; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; }
-        .btn:hover { background: #4a90e2; color: white; }
-        .progress { font-size: 12px; color: #888; margin-bottom: 20px; }
-        h1, h2 { color: #333; }
-        #reveal-page { color: #ff4d6d; }
-        .photo-frame { width: 100%; border-radius: 15px; margin-top: 20px; border: 5px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .heart { font-size: 50px; color: #ff4d6d; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MBTI Personality Test</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f2f4f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.card {
+    background: white;
+    width: 90%;
+    max-width: 420px;
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    text-align: center;
+}
+
+.hidden { display: none; }
+
+h2 { color: #333; }
+p { color: #555; }
+
+button {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 2px solid #4a90e2;
+    background: white;
+    color: #4a90e2;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #4a90e2;
+    color: white;
+}
+
+.progress {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.heart {
+    font-size: 48px;
+    color: #ff4d6d;
+}
+
+.photo {
+    width: 100%;
+    margin-top: 15px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+</style>
 </head>
+
 <body>
 
-    <div class="container">
-        <div id="step1">
-            <div class="progress">Question 1 of 3</div>
-            <h2>How do you usually recharge?</h2>
-            <button class="btn" onclick="goToStep(1, 2)">Spending time with friends</button>
-            <button class="btn" onclick="goToStep(1, 2)">Staying home with a book</button>
-        </div>
+<div class="card">
 
-        <div id="step2" class="hidden">
-            <div class="progress">Question 2 of 3</div>
-            <h2>In life, you usually follow your...</h2>
-            <button class="btn" onclick="goToStep(2, 3)">Heart and Emotions</button>
-            <button class="btn" onclick="goToStep(2, 3)">Logic and Facts</button>
-        </div>
-
-        <div id="step3" class="hidden">
-            <div class="progress">Question 3 of 3</div>
-            <h2>Which describes your last month?</h2>
-            <button class="btn" onclick="startLoading()">Exciting and new</button>
-            <button class="btn" onclick="startLoading()">Quiet and peaceful</button>
-        </div>
-
-        <div id="loading" class="hidden">
-            <h2 id="loading-text">Calculating Personality Type...</h2>
-            <p>Please wait...</p>
-        </div>
-
-        <div id="reveal-page" class="hidden">
-            <div class="heart">❤️</div>
-            <h1>Gotcha!</h1>
-            <h2>Happy 1st Monthsary!</h2>
-            <div style="text-align: left; color: #555; line-height: 1.6;">
-                <p>Hey love, I know you were expecting a personality type, but the truth is, my favorite "type" is you.</p>
-                <p>Happy 1st month! I'm so glad we've made it this far, and I can't wait for many more memories with you.</p>
-            </div>
-            <img src="photo1.jpg" class="photo-frame" alt="Our Picture">
-        </div>
-    </div>
-
-    <script>
-        function goToStep(current, next) {
-            // Hide the current step
-            document.getElementById('step' + current).classList.add('hidden');
-            // Show the next step
-            document.getElementById('step' + next).classList.remove('hidden');
-        }
-
-        function startLoading() {
-            document.getElementById('step3').classList.add('hidden');
-            document.getElementById('loading').classList.remove('hidden');
-
-            // Wait 2 seconds, then show the surprise
-            setTimeout(function() {
-                document.getElementById('loading').classList.add('hidden');
-                document.getElementById('reveal-page').classList.remove('hidden');
-                document.body.style.backgroundColor = "#fff0f3"; // Change background to romantic pink
-            }, 2000);
-        }
-    </script>
-</body>
-</html>
+    <!-- QUESTION 1 -->
+    <div id="step1">
+        <div class="progress">Question 1 of 3</div>
+        <h2>You recharge by...</h2>
+        <button data-next="2">Spending time with people</button>
