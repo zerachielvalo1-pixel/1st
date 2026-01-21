@@ -1,286 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MBTI® Personality Assessment</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTI® Personality Assessment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Sacramento&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --mbti-blue: #4298b4;
+            --boho-brown: #8b6d45;
+            --boho-cream: #f4eee8;
+            --white: #ffffff;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Sacramento&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+        body, html {
+            margin: 0; padding: 0; min-height: 100vh;
+            font-family: 'Montserrat', sans-serif;
+            background: var(--white); color: #333;
+            overflow-x: hidden;
+        }
 
-<style>
-:root{
-  --mbti:#4298b4;
-  --brown:#8b6d45;
-  --cream:#f4eee8;
-}
+        /* --- MBTI QUIZ SECTION --- */
+        #mbti-container {
+            max-width: 600px; margin: 80px auto; padding: 20px; text-align: center;
+            transition: opacity 0.6s ease;
+        }
+        .mbti-header { color: var(--mbti-blue); font-weight: 600; letter-spacing: 2px; margin-bottom: 10px; }
+        .progress-container { width: 100%; height: 8px; background: #eee; border-radius: 10px; margin: 30px 0; }
+        .progress-fill { width: 15%; height: 100%; background: var(--mbti-blue); transition: width 0.4s; border-radius: 10px; }
+        
+        .quiz-card { background: #fdfdfd; border: 1px solid #eee; padding: 40px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .option-btn {
+            display: block; width: 100%; padding: 15px; margin: 10px 0;
+            border: 1px solid #ddd; border-radius: 8px; background: white;
+            cursor: pointer; font-family: 'Montserrat', sans-serif; transition: 0.2s;
+        }
+        .option-btn:hover { border-color: var(--mbti-blue); background: #f0f8fa; }
 
-body,html{
-  margin:0;
-  padding:0;
-  font-family:'Montserrat',sans-serif;
-  background:#fff;
-}
+        /* --- SURPRISE SECTION --- */
+        #surprise-screen {
+            display: none; opacity: 0; transition: opacity 1.5s ease;
+            background: linear-gradient(rgba(139, 109, 69, 0.8), rgba(139, 109, 69, 0.95)), #8b6d45;
+            padding: 80px 20px; text-align: center; min-height: 100vh;
+        }
 
-/* ===== MBTI QUIZ ===== */
-#mbti{
-  max-width:600px;
-  margin:70px auto;
-  padding:20px;
-  text-align:center;
-}
+        .main-title { font-family: 'Sacramento', cursive; font-size: 5rem; color: white; margin-bottom: 0; }
+        .sub-title { font-family: 'Cormorant Garamond', serif; color: var(--boho-cream); font-size: 1.1rem; letter-spacing: 3px; margin-bottom: 60px; }
 
-.logo{
-  color:var(--mbti);
-  letter-spacing:3px;
-  font-weight:600;
-  margin-bottom:20px;
-}
+        /* --- ADVANCED ENVELOPE (Love Letter Style) --- */
+        .env-wrapper {
+            position: relative; width: 320px; height: 200px; margin: 0 auto 150px;
+            cursor: pointer; perspective: 1000px; z-index: 100;
+        }
+        .envelope {
+            position: relative; width: 100%; height: 100%; background: #e0d5c8;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); z-index: 10;
+        }
+        .envelope::before { /* Flap */
+            content: ""; position: absolute; top: 0; left: 0; z-index: 12;
+            border-left: 160px solid transparent; border-right: 160px solid transparent;
+            border-top: 110px solid #d4c4b5; transform-origin: top; transition: 0.6s ease;
+        }
+        .env-wrapper.open .envelope::before { transform: rotateX(180deg); z-index: 5; }
 
-.progress{
-  height:8px;
-  background:#eee;
-  border-radius:10px;
-  overflow:hidden;
-  margin-bottom:30px;
-}
-.progress div{
-  height:100%;
-  width:0%;
-  background:var(--mbti);
-  transition:.4s;
-}
+        .letter {
+            position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%);
+            width: 280px; height: 170px; background: #fffdfa; padding: 40px;
+            transition: 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 8;
+            font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; line-height: 1.6;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1); overflow-y: auto; text-align: left;
+        }
+        .env-wrapper.open .letter {
+            transform: translate(-50%, -180px) scale(1.6); /* Makes letter wider/larger */
+            height: 400px; z-index: 13; width: 380px; max-width: 85vw;
+        }
 
-.card{
-  background:#fafafa;
-  padding:40px;
-  border-radius:15px;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
-}
+        /* --- BOHO FILM GALLERY --- */
+        .gallery {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px; max-width: 1000px; margin: 250px auto 0; padding: 20px;
+        }
+        .polaroid {
+            background: white; padding: 15px 15px 60px 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2); transition: 0.3s;
+            position: relative; transform: rotate(var(--r));
+        }
+        .polaroid::before {
+            content: "▶ 32A   33   ▶ 33A   34"; position: absolute;
+            left: -28px; top: 50%; transform: rotate(-90deg);
+            color: #ddd; font-size: 9px; font-family: monospace; letter-spacing: 4px;
+        }
+        .polaroid img, .polaroid video { width: 100%; height: 280px; object-fit: cover; display: block; border-radius: 2px; }
+        .polaroid:hover { transform: scale(1.05) rotate(0deg); z-index: 50; }
+        .label { margin-top: 15px; font-size: 0.75rem; color: #999; text-transform: uppercase; letter-spacing: 1px; }
 
-.option{
-  width:100%;
-  padding:15px;
-  margin:10px 0;
-  border-radius:8px;
-  border:1px solid #ddd;
-  background:#fff;
-  cursor:pointer;
-  font-size:1rem;
-}
-.option:hover{border-color:var(--mbti);}
-
-/* ===== SURPRISE ===== */
-#surprise{
-  display:none;
-  opacity:0;
-  transition:opacity 1.5s;
-  min-height:100vh;
-  background:linear-gradient(rgba(139,109,69,.9),rgba(139,109,69,.95)),
-  url("https://www.transparenttextures.com/patterns/paper-fibers.png");
-  padding:80px 20px;
-  text-align:center;
-}
-
-h1{
-  font-family:'Sacramento',cursive;
-  font-size:4.5rem;
-  color:white;
-  margin-bottom:10px;
-}
-.subtitle{
-  color:var(--cream);
-  letter-spacing:4px;
-  margin-bottom:70px;
-}
-
-/* ===== ENVELOPE ===== */
-.env-wrap{
-  width:380px;
-  height:230px;
-  margin:0 auto 140px;
-  perspective:1500px;
-  cursor:pointer;
-}
-.envelope{
-  width:100%;
-  height:100%;
-  background:#e0d5c8;
-  position:relative;
-  box-shadow:0 20px 40px rgba(0,0,0,.3);
-}
-.envelope::before{
-  content:"";
-  position:absolute;
-  top:0;
-  border-left:190px solid transparent;
-  border-right:190px solid transparent;
-  border-top:130px solid #d4c4b5;
-  transform-origin:top;
-  transition:.6s;
-}
-.env-wrap.open .envelope::before{
-  transform:rotateX(180deg);
-}
-
-/* LETTER (WIDE) */
-.letter{
-  position:absolute;
-  bottom:10px;
-  left:50%;
-  transform:translateX(-50%);
-  width:620px;
-  max-width:95vw;
-  height:190px;
-  background:#fffdfa;
-  padding:45px;
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.4rem;
-  line-height:1.6;
-  overflow-y:auto;
-  box-shadow:0 10px 25px rgba(0,0,0,.2);
-  transition:.9s;
-}
-.env-wrap.open .letter{
-  transform:translate(-50%,-170px);
-  height:460px;
-}
-
-/* ===== GALLERY ===== */
-.gallery{
-  max-width:1100px;
-  margin:200px auto 0;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-  gap:35px;
-}
-.polaroid{
-  background:#fff;
-  padding:15px 15px 55px;
-  box-shadow:0 15px 30px rgba(0,0,0,.25);
-  transform:rotate(-2deg);
-}
-.polaroid:nth-child(even){transform:rotate(2deg);}
-.polaroid img,
-.polaroid video{
-  width:100%;
-  height:320px;
-  object-fit:cover;
-}
-.video-label{
-  margin-top:10px;
-  font-size:.8rem;
-  color:#666;
-  text-transform:uppercase;
-}
-video{cursor:pointer;}
-</style>
+    </style>
 </head>
-
 <body>
 
-<!-- MBTI -->
-<div id="mbti">
-  <div class="logo">PERSONALITY ASSESSMENT</div>
-  <div class="progress"><div id="bar"></div></div>
+    <div id="mbti-container">
+        <div class="mbti-header">PERSONALITY ASSESSMENT</div>
+        <div class="progress-container"><div class="progress-fill" id="progress"></div></div>
+        
+        <div class="quiz-card" id="q1">
+            <h3>Question 1</h3>
+            <p>Do you feel more energized by interacting with a group or by quiet reflection?</p>
+            <button class="option-btn" onclick="nextStep(2, '50%')">Interaction with others</button>
+            <button class="option-btn" onclick="nextStep(2, '50%')">Quiet reflection</button>
+        </div>
 
-  <div class="card" id="q1">
-    <h3>Question 1</h3>
-    <p>Do you gain energy from people or from time alone?</p>
-    <button class="option" onclick="next(2,33)">People</button>
-    <button class="option" onclick="next(2,33)">Time alone</button>
-  </div>
+        <div class="quiz-card" id="q2" style="display:none;">
+            <h3>Question 2</h3>
+            <p>Are you more comfortable following a set schedule or going with the flow?</p>
+            <button class="option-btn" onclick="nextStep(3, '90%')">Following a schedule</button>
+            <button class="option-btn" onclick="nextStep(3, '90%')">Going with the flow</button>
+        </div>
 
-  <div class="card" id="q2" style="display:none">
-    <h3>Question 2</h3>
-    <p>Do you trust logic more than emotions?</p>
-    <button class="option" onclick="next(3,66)">Logic</button>
-    <button class="option" onclick="next(3,66)">Emotions</button>
-  </div>
-
-  <div class="card" id="q3" style="display:none">
-    <h3>Final Step</h3>
-    <p>Your personality type is ready.</p>
-    <button class="option" style="background:var(--mbti);color:#fff"
-      onclick="reveal()">View Results</button>
-  </div>
-</div>
-
-<!-- SURPRISE -->
-<div id="surprise">
-  <h1>Happy Monthsary</h1>
-  <div class="subtitle">CHEERS TO US</div>
-
-  <div class="env-wrap" id="env" onclick="openLetter()">
-    <div class="envelope">
-      <div class="letter">
-        <h2 style="font-family:'Sacramento',cursive;font-size:2.6rem;margin-top:0">
-          My Love,
-        </h2>
-        <p>
-          You thought this was just a personality test—but the truth is,
-          the only thing I wanted to measure was how lucky I am to have you.
-        </p>
-        <p>
-          These months with you have been my favorite chapter.
-          Thank you for loving me, choosing me, and being my home.
-        </p>
-        <p style="font-family:'Sacramento',cursive;font-size:2rem">
-          Always yours,<br>[Your Name]
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <div class="gallery">
-    <div class="polaroid"><img src="1.jpg"></div>
-    <div class="polaroid"><img src="2.jpg"></div>
-    <div class="polaroid"><img src="3.jpg"></div>
-
-    <div class="polaroid">
-      <video onclick="playVid(this)">
-        <source src="vid1.mp4" type="video/mp4">
-      </video>
-      <div class="video-label">Tap to play</div>
+        <div class="quiz-card" id="q3" style="display:none;">
+            <h3>Analyzing Profile...</h3>
+            <p>Your results are ready based on your behavioral patterns.</p>
+            <button class="option-btn" style="background: var(--mbti-blue); color: white;" onclick="revealSurprise()">View My Personality Result</button>
+        </div>
     </div>
 
-    <div class="polaroid">
-      <video onclick="playVid(this)">
-        <source src="vid2.mp4" type="video/mp4">
-      </video>
-      <div class="video-label">Tap to play</div>
+    <div id="surprise-screen">
+        <h1 class="main-title">Happy Anniversary</h1>
+        <p class="sub-title">CHEERS TO US AND OUR JOURNEY TOGETHER</p>
+
+        <div class="env-wrapper" id="env-box" onclick="openAll()">
+            <div class="envelope">
+                <div class="letter">
+                    <h2 style="font-family: 'Sacramento', cursive; font-size: 2.8rem; margin: 0; color: var(--boho-brown);">My Love,</h2>
+                    <p>I know you were expecting an MBTI type, but the only "type" I need is you. Thank you for being my partner and my home.</p>
+                    <p>Every day with you is a memory I keep forever. I made this to show you a few of my favorites. You mean the world to me.</p>
+                    <p>I love you infinitely. Happy Anniversary!</p>
+                    <p style="font-family: 'Sacramento', cursive; font-size: 2.2rem; margin-bottom:0;">Yours always, <br> [Your Name]</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="gallery">
+            <div class="polaroid" style="--r: -2deg;"><img src="1.jpg" alt="Memory 1"></div>
+            <div class="polaroid" style="--r: 3deg;"><img src="2.jpg" alt="Memory 2"></div>
+            <div class="polaroid" style="--r: -1deg;"><img src="3.jpg" alt="Memory 3"></div>
+            
+            <div class="polaroid" style="--r: 2deg;">
+                <video id="v1" onclick="togglePlay(this)" poster="thumb1.jpg">
+                    <source src="vid1.mp4" type="video/mp4">
+                </video>
+                <div class="label">Tap to play video</div>
+            </div>
+            <div class="polaroid" style="--r: -3deg;">
+                <video id="v2" onclick="togglePlay(this)" poster="thumb2.jpg">
+                    <source src="vid2.mp4" type="video/mp4">
+                </video>
+                <div class="label">Tap to play video</div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<audio id="music" src="music.mp3" loop></audio>
+    <audio id="bg-music" src="music.mp3" loop></audio>
 
-<script>
-function next(n,percent){
-  document.querySelectorAll('.card').forEach(c=>c.style.display='none');
-  document.getElementById('q'+n).style.display='block';
-  document.getElementById('bar').style.width=percent+'%';
-}
+    <script>
+        // Quiz Disguise Logic
+        function nextStep(step, progress) {
+            document.querySelectorAll('.quiz-card').forEach(card => card.style.display = 'none');
+            document.getElementById('q' + (step === 3 ? '3' : step)).style.display = 'block';
+            document.getElementById('progress').style.width = progress;
+        }
 
-function reveal(){
-  document.getElementById('mbti').style.display='none';
-  const s=document.getElementById('surprise');
-  s.style.display='block';
-  setTimeout(()=>s.style.opacity=1,50);
-}
+        function revealSurprise() {
+            document.getElementById('mbti-container').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('mbti-container').style.display = 'none';
+                const surprise = document.getElementById('surprise-screen');
+                surprise.style.display = 'block';
+                setTimeout(() => surprise.style.opacity = '1', 50);
+            }, 600);
+        }
 
-function openLetter(){
-  const e=document.getElementById('env');
-  if(!e.classList.contains('open')){
-    e.classList.add('open');
-    document.getElementById('music').play();
-  }
-}
+        // Envelope Animation & Music
+        function openAll() {
+            const env = document.getElementById('env-box');
+            const music = document.getElementById('bg-music');
+            if (!env.classList.contains('open')) {
+                env.classList.add('open');
+                music.play().catch(() => console.log("User interaction required for audio"));
+            }
+        }
 
-function playVid(v){
-  v.muted=false;
-  v.paused ? v.play() : v.pause();
-}
-</script>
-
+        // Video Playback
+        function togglePlay(video) {
+            video.muted = false; // Ensure sound plays
+            if (video.paused) {
+                video.play();
+            } else {
+                video.pause();
+            }
+        }
+    </script>
 </body>
 </html>
