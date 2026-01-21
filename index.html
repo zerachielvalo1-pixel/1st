@@ -4,112 +4,122 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MBTI® Personality Assessment</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Sacramento&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Sacramento&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --mbti-blue: #4298b4;
             --boho-brown: #8b6d45;
             --boho-cream: #f4eee8;
-            --film-black: #1a1a1a;
+            --white: #ffffff;
         }
 
         body, html {
             margin: 0; padding: 0; min-height: 100vh;
             font-family: 'Montserrat', sans-serif;
-            background: #ffffff; color: #333;
-            scroll-behavior: smooth;
+            background: var(--white); color: #333;
+            overflow-x: hidden;
         }
 
-        /* --- MBTI UI --- */
-        #mbti-screen {
-            max-width: 700px; margin: 80px auto; padding: 20px; text-align: center;
+        /* --- MBTI DISGUISE SECTION --- */
+        #mbti-container {
+            max-width: 600px; margin: 60px auto; padding: 20px; text-align: center;
         }
-        .mbti-logo { font-weight: 600; color: var(--mbti-blue); letter-spacing: 2px; margin-bottom: 40px; }
-        .progress-container { width: 100%; height: 6px; background: #eee; border-radius: 10px; margin-bottom: 50px; }
-        .progress-bar { width: 98%; height: 100%; background: var(--mbti-blue); border-radius: 10px; transition: 1s; }
+        .mbti-header { color: var(--mbti-blue); font-weight: 600; letter-spacing: 2px; margin-bottom: 10px; }
+        .progress-container { width: 100%; height: 8px; background: #eee; border-radius: 10px; margin: 30px 0; }
+        .progress-fill { width: 10%; height: 100%; background: var(--mbti-blue); transition: width 0.5s ease; border-radius: 10px; }
         
-        .quiz-box { background: #fdfdfd; border: 1px solid #eee; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
-        .mbti-btn {
-            background: var(--mbti-blue); color: white; border: none;
-            padding: 16px 45px; border-radius: 5px; font-size: 1rem;
-            cursor: pointer; margin-top: 30px; transition: 0.3s;
+        .quiz-card { background: #fdfdfd; border: 1px solid #eee; padding: 40px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .option-btn {
+            display: block; width: 100%; padding: 15px; margin: 10px 0;
+            border: 1px solid #ddd; border-radius: 8px; background: white;
+            cursor: pointer; font-family: 'Montserrat', sans-serif; transition: 0.2s;
         }
-
-        /* --- SURPRISE SCREEN --- */
+        .option-btn:hover { border-color: var(--mbti-blue); background: #f0f8fa; }
+        
+        /* --- SURPRISE SECTION --- */
         #surprise-screen {
-            display: none; opacity: 0; transition: opacity 2s ease;
-            background: linear-gradient(rgba(139, 109, 69, 0.8), rgba(139, 109, 69, 0.9)), 
+            display: none; opacity: 0; transition: opacity 1.5s ease;
+            background: linear-gradient(rgba(139, 109, 69, 0.85), rgba(139, 109, 69, 0.95)), 
                         url('https://www.transparenttextures.com/patterns/paper-fibers.png'), #8b6d45;
-            padding: 60px 20px; text-align: center;
+            padding: 80px 20px; text-align: center; min-height: 100vh;
         }
 
-        .main-title {
-            font-family: 'Sacramento', cursive; font-size: 4.5rem;
-            color: white; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-        .sub-title { font-family: 'Cormorant Garamond', serif; color: #f4eee8; font-size: 1.2rem; margin-bottom: 50px; letter-spacing: 3px; }
+        .main-title { font-family: 'Sacramento', cursive; font-size: 5rem; color: white; margin-bottom: 0; }
+        .sub-title { font-family: 'Cormorant Garamond', serif; color: var(--boho-cream); font-size: 1.2rem; letter-spacing: 4px; margin-bottom: 60px; }
 
-        /* --- THE ENVELOPE --- */
+        /* --- WIDER ENVELOPE & LETTER --- */
         .env-wrapper {
-            position: relative; width: 300px; height: 200px; margin: 0 auto 100px;
-            cursor: pointer; perspective: 1000px;
+            position: relative; width: 350px; height: 220px; margin: 0 auto 120px;
+            cursor: pointer; perspective: 1500px;
         }
         .envelope {
             position: relative; width: 100%; height: 100%; background: #e0d5c8;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2); z-index: 10;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); z-index: 10;
         }
-        .envelope::before { /* Flap */
-            content: ""; position: absolute; top: 0; z-index: 12;
-            border-left: 150px solid transparent; border-right: 150px solid transparent;
-            border-top: 100px solid #d4c4b5; transform-origin: top; transition: 0.6s;
+        .envelope::before {
+            content: ""; position: absolute; top: 0; left: 0; z-index: 12;
+            border-left: 175px solid transparent; border-right: 175px solid transparent;
+            border-top: 120px solid #d4c4b5; transform-origin: top; transition: 0.6s;
         }
         .env-wrapper.open .envelope::before { transform: rotateX(180deg); }
 
         .letter {
-            position: absolute; bottom: 5px; left: 10px; right: 10px; height: 180px;
-            background: #fffdfa; padding: 25px; transition: 0.8s; z-index: 11;
-            font-family: 'Sacramento', cursive; font-size: 1.5rem; line-height: 1.4;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1); overflow-y: auto; text-align: left;
+            position: absolute; bottom: 10px; left: 10px; right: 10px; height: 180px;
+            background: #fffdfa; padding: 40px; transition: 0.8s; z-index: 11;
+            font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; line-height: 1.6;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1); overflow-y: auto; text-align: left;
+            width: 450px; left: 50%; transform: translateX(-50%); /* Makes letter wider than envelope */
         }
-        .env-wrapper.open .letter { transform: translateY(-130px); height: 350px; z-index: 13; }
+        .env-wrapper.open .letter { transform: translate(-50%, -150px); height: 450px; z-index: 13; width: 550px; max-width: 90vw; }
 
-        /* --- PHOTO GRID (Polaroid Style) --- */
+        /* --- PHOTO GRID (3 Photos, 2 Videos) --- */
         .gallery {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px; max-width: 1000px; margin: 150px auto 0;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px; max-width: 1100px; margin: 200px auto 0; padding: 20px;
         }
         .polaroid {
-            background: white; padding: 15px 15px 50px 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            transition: 0.4s; position: relative;
+            background: white; padding: 15px 15px 60px 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2); transition: 0.3s;
+            position: relative; border-radius: 2px;
         }
-        /* Film Strip markings like your image */
         .polaroid::before {
             content: "▶ 32A   33   ▶ 33A   34"; position: absolute;
-            left: -25px; top: 50%; transform: rotate(-90deg);
-            color: white; font-size: 10px; font-family: monospace; letter-spacing: 5px;
+            left: -30px; top: 50%; transform: rotate(-90deg);
+            color: #ccc; font-size: 10px; font-family: monospace; letter-spacing: 4px;
         }
-        .polaroid img, .polaroid video { width: 100%; height: auto; display: block; filter: sepia(0.2); }
-        .polaroid:nth-child(even) { transform: rotate(3deg); }
+        .polaroid img, .polaroid video { width: 100%; height: 300px; object-fit: cover; display: block; }
         .polaroid:nth-child(odd) { transform: rotate(-2deg); }
-        .polaroid:hover { transform: scale(1.05) rotate(0deg); z-index: 20; }
+        .polaroid:nth-child(even) { transform: rotate(2deg); }
+        .polaroid:hover { transform: scale(1.05) rotate(0deg); z-index: 50; }
 
-        video { cursor: pointer; background: black; }
-        
-        .footer-msg { font-family: 'Cormorant Garamond', serif; color: white; margin-top: 100px; font-size: 1.5rem; font-style: italic; }
+        .video-label { margin-top: 15px; font-size: 0.8rem; color: #888; font-weight: 600; text-transform: uppercase; }
 
     </style>
 </head>
 <body>
 
-    <div id="mbti-screen">
-        <div class="mbti-logo">FREE PERSONALITY TEST</div>
-        <div class="progress-container"><div class="progress-bar"></div></div>
-        <div class="quiz-box">
-            <h2 style="font-weight: 400; margin-bottom: 10px;">Final Analysis</h2>
-            <p style="color: #666;">Based on your responses, we are finalizing your archetype...</p>
-            <p style="font-size: 0.9rem; color: #999; margin-top: 30px;">"Do you find it easy to stay relaxed even when there is some pressure?"</p>
-            <button class="mbti-btn" onclick="startReveal()">Get My Results</button>
+    <div id="mbti-container">
+        <div class="mbti-header">PERSONALITY ASSESSMENT</div>
+        <div class="progress-container"><div class="progress-fill" id="progress"></div></div>
+        
+        <div class="quiz-card" id="q1">
+            <h3>Question 1</h3>
+            <p>Do you focus on the details of the present or the possibilities of the future?</p>
+            <button class="option-btn" onclick="nextStep(2, '40%')">The Present Details</button>
+            <button class="option-btn" onclick="nextStep(2, '40%')">Future Possibilities</button>
+        </div>
+
+        <div class="quiz-card" id="q2" style="display:none;">
+            <h3>Question 2</h3>
+            <p>In decision making, do you rely more on logic or personal values?</p>
+            <button class="option-btn" onclick="nextStep(3, '70%')">Objective Logic</button>
+            <button class="option-btn" onclick="nextStep(3, '70%')">Personal Values</button>
+        </div>
+
+        <div class="quiz-card" id="q3" style="display:none;">
+            <h3>Final Step</h3>
+            <p>We have calculated your core archetype. Ready to see your results?</p>
+            <button class="option-btn" style="background: var(--mbti-blue); color: white;" onclick="revealSurprise()">View My Results</button>
         </div>
     </div>
 
@@ -117,70 +127,73 @@
         <h1 class="main-title">Happy Anniversary</h1>
         <p class="sub-title">CHEERS TO US AND OUR JOURNEY TOGETHER</p>
 
-        <div class="env-wrapper" id="envelope" onclick="openLetter()">
+        <div class="env-wrapper" id="env-box" onclick="openAll()">
             <div class="envelope">
                 <div class="letter">
-                    <span style="color: var(--boho-brown); font-weight: bold;">To my favorite person,</span><br><br>
-                    You didn't really think this was an MBTI test, did you? The only result I needed was to know that I'm the luckiest person to have you. <br><br>
-                    Every day with you is my favorite memory. Thank you for these beautiful months. I love you more than words can say.<br><br>
-                    Forever yours, <br>
-                    [Your Name]
+                    <h2 style="font-family: 'Sacramento', cursive; font-size: 2.5rem; margin-top: 0;">My Dearest,</h2>
+                    <p>I know you were expecting a personality type, but the only "type" I care about is you. Thank you for being my partner, my best friend, and my greatest adventure.</p>
+                    <p>Every single day with you is a gift, and I wanted to make something special to remind you of how much these months have meant to me. You make life so much brighter just by being in it.</p>
+                    <p>I love you more than any test could ever measure. Happy Anniversary, my love!</p>
+                    <p style="font-family: 'Sacramento', cursive; font-size: 2rem;">Always yours, <br> [Your Name]</p>
                 </div>
             </div>
         </div>
 
         <div class="gallery">
-            <div class="polaroid"><img src="1.jpg" alt="Memory"></div>
-            <div class="polaroid"><img src="2.jpg" alt="Memory"></div>
-            <div class="polaroid"><img src="3.jpg" alt="Memory"></div>
-            <div class="polaroid"><img src="4.jpg" alt="Memory"></div>
+            <div class="polaroid"><img src="1.jpg" alt="Memory 1"></div>
+            <div class="polaroid"><img src="2.jpg" alt="Memory 2"></div>
+            <div class="polaroid"><img src="3.jpg" alt="Memory 3"></div>
             
             <div class="polaroid">
-                <video id="v1" src="vid1.mp4" loop muted playsinline onclick="playVid(this)"></video>
-                <p style="font-size: 0.8rem; margin: 10px 0 0; color: #888;">Tap to play video</p>
+                <video id="v1" onclick="togglePlay(this)">
+                    <source src="vid1.mp4" type="video/mp4">
+                </video>
+                <div class="video-label">Tap to Play Video 1</div>
             </div>
             <div class="polaroid">
-                <video id="v2" src="vid2.mp4" loop muted playsinline onclick="playVid(this)"></video>
-                <p style="font-size: 0.8rem; margin: 10px 0 0; color: #888;">Tap to play video</p>
+                <video id="v2" onclick="togglePlay(this)">
+                    <source src="vid2.mp4" type="video/mp4">
+                </video>
+                <div class="video-label">Tap to Play Video 2</div>
             </div>
         </div>
-
-        <p class="footer-msg">"I love you to the moon and back."</p>
     </div>
 
     <audio id="bg-music" src="music.mp3" loop></audio>
 
     <script>
-        function startReveal() {
-            const mbti = document.getElementById('mbti-screen');
-            const surprise = document.getElementById('surprise-screen');
-            
-            mbti.style.opacity = '0';
-            setTimeout(() => {
-                mbti.style.display = 'none';
-                surprise.style.display = 'block';
-                setTimeout(() => {
-                    surprise.style.opacity = '1';
-                }, 100);
-            }, 800);
+        function nextStep(step, progress) {
+            document.querySelectorAll('.quiz-card').forEach(card => card.style.display = 'none');
+            document.getElementById('q' + (step === 3 ? '3' : step)).style.display = 'block';
+            document.getElementById('progress').style.width = progress;
         }
 
-        function openLetter() {
-            const env = document.getElementById('envelope');
+        function revealSurprise() {
+            document.getElementById('mbti-container').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('mbti-container').style.display = 'none';
+                const surprise = document.getElementById('surprise-screen');
+                surprise.style.display = 'block';
+                setTimeout(() => surprise.style.opacity = '1', 50);
+            }, 600);
+        }
+
+        function openAll() {
+            const env = document.getElementById('env-box');
             const music = document.getElementById('bg-music');
-            
             if (!env.classList.contains('open')) {
                 env.classList.add('open');
-                music.play().catch(e => console.log("Music play blocked - needs interaction"));
+                music.play().catch(() => console.log("Audio needs interaction"));
             }
         }
 
-        function playVid(el) {
-            if (el.paused) {
-                el.play();
-                el.muted = false;
+        function togglePlay(video) {
+            // Unmute and play on first click
+            video.muted = false;
+            if (video.paused) {
+                video.play();
             } else {
-                el.pause();
+                video.pause();
             }
         }
     </script>
