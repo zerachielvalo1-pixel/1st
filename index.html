@@ -1,201 +1,286 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MBTI® Personality Assessment</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Sacramento&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --mbti-blue: #4298b4;
-            --boho-brown: #8b6d45;
-            --boho-cream: #f4eee8;
-            --white: #ffffff;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MBTI® Personality Assessment</title>
 
-        body, html {
-            margin: 0; padding: 0; min-height: 100vh;
-            font-family: 'Montserrat', sans-serif;
-            background: var(--white); color: #333;
-            overflow-x: hidden;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Sacramento&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
 
-        /* --- MBTI DISGUISE SECTION --- */
-        #mbti-container {
-            max-width: 600px; margin: 60px auto; padding: 20px; text-align: center;
-        }
-        .mbti-header { color: var(--mbti-blue); font-weight: 600; letter-spacing: 2px; margin-bottom: 10px; }
-        .progress-container { width: 100%; height: 8px; background: #eee; border-radius: 10px; margin: 30px 0; }
-        .progress-fill { width: 10%; height: 100%; background: var(--mbti-blue); transition: width 0.5s ease; border-radius: 10px; }
-        
-        .quiz-card { background: #fdfdfd; border: 1px solid #eee; padding: 40px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
-        .option-btn {
-            display: block; width: 100%; padding: 15px; margin: 10px 0;
-            border: 1px solid #ddd; border-radius: 8px; background: white;
-            cursor: pointer; font-family: 'Montserrat', sans-serif; transition: 0.2s;
-        }
-        .option-btn:hover { border-color: var(--mbti-blue); background: #f0f8fa; }
-        
-        /* --- SURPRISE SECTION --- */
-        #surprise-screen {
-            display: none; opacity: 0; transition: opacity 1.5s ease;
-            background: linear-gradient(rgba(139, 109, 69, 0.85), rgba(139, 109, 69, 0.95)), 
-                        url('https://www.transparenttextures.com/patterns/paper-fibers.png'), #8b6d45;
-            padding: 80px 20px; text-align: center; min-height: 100vh;
-        }
+<style>
+:root{
+  --mbti:#4298b4;
+  --brown:#8b6d45;
+  --cream:#f4eee8;
+}
 
-        .main-title { font-family: 'Sacramento', cursive; font-size: 5rem; color: white; margin-bottom: 0; }
-        .sub-title { font-family: 'Cormorant Garamond', serif; color: var(--boho-cream); font-size: 1.2rem; letter-spacing: 4px; margin-bottom: 60px; }
+body,html{
+  margin:0;
+  padding:0;
+  font-family:'Montserrat',sans-serif;
+  background:#fff;
+}
 
-        /* --- WIDER ENVELOPE & LETTER --- */
-        .env-wrapper {
-            position: relative; width: 350px; height: 220px; margin: 0 auto 120px;
-            cursor: pointer; perspective: 1500px;
-        }
-        .envelope {
-            position: relative; width: 100%; height: 100%; background: #e0d5c8;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3); z-index: 10;
-        }
-        .envelope::before {
-            content: ""; position: absolute; top: 0; left: 0; z-index: 12;
-            border-left: 175px solid transparent; border-right: 175px solid transparent;
-            border-top: 120px solid #d4c4b5; transform-origin: top; transition: 0.6s;
-        }
-        .env-wrapper.open .envelope::before { transform: rotateX(180deg); }
+/* ===== MBTI QUIZ ===== */
+#mbti{
+  max-width:600px;
+  margin:70px auto;
+  padding:20px;
+  text-align:center;
+}
 
-        .letter {
-            position: absolute; bottom: 10px; left: 10px; right: 10px; height: 180px;
-            background: #fffdfa; padding: 40px; transition: 0.8s; z-index: 11;
-            font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; line-height: 1.6;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1); overflow-y: auto; text-align: left;
-            width: 450px; left: 50%; transform: translateX(-50%); /* Makes letter wider than envelope */
-        }
-        .env-wrapper.open .letter { transform: translate(-50%, -150px); height: 450px; z-index: 13; width: 550px; max-width: 90vw; }
+.logo{
+  color:var(--mbti);
+  letter-spacing:3px;
+  font-weight:600;
+  margin-bottom:20px;
+}
 
-        /* --- PHOTO GRID (3 Photos, 2 Videos) --- */
-        .gallery {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px; max-width: 1100px; margin: 200px auto 0; padding: 20px;
-        }
-        .polaroid {
-            background: white; padding: 15px 15px 60px 15px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2); transition: 0.3s;
-            position: relative; border-radius: 2px;
-        }
-        .polaroid::before {
-            content: "▶ 32A   33   ▶ 33A   34"; position: absolute;
-            left: -30px; top: 50%; transform: rotate(-90deg);
-            color: #ccc; font-size: 10px; font-family: monospace; letter-spacing: 4px;
-        }
-        .polaroid img, .polaroid video { width: 100%; height: 300px; object-fit: cover; display: block; }
-        .polaroid:nth-child(odd) { transform: rotate(-2deg); }
-        .polaroid:nth-child(even) { transform: rotate(2deg); }
-        .polaroid:hover { transform: scale(1.05) rotate(0deg); z-index: 50; }
+.progress{
+  height:8px;
+  background:#eee;
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:30px;
+}
+.progress div{
+  height:100%;
+  width:0%;
+  background:var(--mbti);
+  transition:.4s;
+}
 
-        .video-label { margin-top: 15px; font-size: 0.8rem; color: #888; font-weight: 600; text-transform: uppercase; }
+.card{
+  background:#fafafa;
+  padding:40px;
+  border-radius:15px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
 
-    </style>
+.option{
+  width:100%;
+  padding:15px;
+  margin:10px 0;
+  border-radius:8px;
+  border:1px solid #ddd;
+  background:#fff;
+  cursor:pointer;
+  font-size:1rem;
+}
+.option:hover{border-color:var(--mbti);}
+
+/* ===== SURPRISE ===== */
+#surprise{
+  display:none;
+  opacity:0;
+  transition:opacity 1.5s;
+  min-height:100vh;
+  background:linear-gradient(rgba(139,109,69,.9),rgba(139,109,69,.95)),
+  url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+  padding:80px 20px;
+  text-align:center;
+}
+
+h1{
+  font-family:'Sacramento',cursive;
+  font-size:4.5rem;
+  color:white;
+  margin-bottom:10px;
+}
+.subtitle{
+  color:var(--cream);
+  letter-spacing:4px;
+  margin-bottom:70px;
+}
+
+/* ===== ENVELOPE ===== */
+.env-wrap{
+  width:380px;
+  height:230px;
+  margin:0 auto 140px;
+  perspective:1500px;
+  cursor:pointer;
+}
+.envelope{
+  width:100%;
+  height:100%;
+  background:#e0d5c8;
+  position:relative;
+  box-shadow:0 20px 40px rgba(0,0,0,.3);
+}
+.envelope::before{
+  content:"";
+  position:absolute;
+  top:0;
+  border-left:190px solid transparent;
+  border-right:190px solid transparent;
+  border-top:130px solid #d4c4b5;
+  transform-origin:top;
+  transition:.6s;
+}
+.env-wrap.open .envelope::before{
+  transform:rotateX(180deg);
+}
+
+/* LETTER (WIDE) */
+.letter{
+  position:absolute;
+  bottom:10px;
+  left:50%;
+  transform:translateX(-50%);
+  width:620px;
+  max-width:95vw;
+  height:190px;
+  background:#fffdfa;
+  padding:45px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.4rem;
+  line-height:1.6;
+  overflow-y:auto;
+  box-shadow:0 10px 25px rgba(0,0,0,.2);
+  transition:.9s;
+}
+.env-wrap.open .letter{
+  transform:translate(-50%,-170px);
+  height:460px;
+}
+
+/* ===== GALLERY ===== */
+.gallery{
+  max-width:1100px;
+  margin:200px auto 0;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:35px;
+}
+.polaroid{
+  background:#fff;
+  padding:15px 15px 55px;
+  box-shadow:0 15px 30px rgba(0,0,0,.25);
+  transform:rotate(-2deg);
+}
+.polaroid:nth-child(even){transform:rotate(2deg);}
+.polaroid img,
+.polaroid video{
+  width:100%;
+  height:320px;
+  object-fit:cover;
+}
+.video-label{
+  margin-top:10px;
+  font-size:.8rem;
+  color:#666;
+  text-transform:uppercase;
+}
+video{cursor:pointer;}
+</style>
 </head>
+
 <body>
 
-    <div id="mbti-container">
-        <div class="mbti-header">PERSONALITY ASSESSMENT</div>
-        <div class="progress-container"><div class="progress-fill" id="progress"></div></div>
-        
-        <div class="quiz-card" id="q1">
-            <h3>Question 1</h3>
-            <p>Do you focus on the details of the present or the possibilities of the future?</p>
-            <button class="option-btn" onclick="nextStep(2, '40%')">The Present Details</button>
-            <button class="option-btn" onclick="nextStep(2, '40%')">Future Possibilities</button>
-        </div>
+<!-- MBTI -->
+<div id="mbti">
+  <div class="logo">PERSONALITY ASSESSMENT</div>
+  <div class="progress"><div id="bar"></div></div>
 
-        <div class="quiz-card" id="q2" style="display:none;">
-            <h3>Question 2</h3>
-            <p>In decision making, do you rely more on logic or personal values?</p>
-            <button class="option-btn" onclick="nextStep(3, '70%')">Objective Logic</button>
-            <button class="option-btn" onclick="nextStep(3, '70%')">Personal Values</button>
-        </div>
+  <div class="card" id="q1">
+    <h3>Question 1</h3>
+    <p>Do you gain energy from people or from time alone?</p>
+    <button class="option" onclick="next(2,33)">People</button>
+    <button class="option" onclick="next(2,33)">Time alone</button>
+  </div>
 
-        <div class="quiz-card" id="q3" style="display:none;">
-            <h3>Final Step</h3>
-            <p>We have calculated your core archetype. Ready to see your results?</p>
-            <button class="option-btn" style="background: var(--mbti-blue); color: white;" onclick="revealSurprise()">View My Results</button>
-        </div>
+  <div class="card" id="q2" style="display:none">
+    <h3>Question 2</h3>
+    <p>Do you trust logic more than emotions?</p>
+    <button class="option" onclick="next(3,66)">Logic</button>
+    <button class="option" onclick="next(3,66)">Emotions</button>
+  </div>
+
+  <div class="card" id="q3" style="display:none">
+    <h3>Final Step</h3>
+    <p>Your personality type is ready.</p>
+    <button class="option" style="background:var(--mbti);color:#fff"
+      onclick="reveal()">View Results</button>
+  </div>
+</div>
+
+<!-- SURPRISE -->
+<div id="surprise">
+  <h1>Happy Monthsary</h1>
+  <div class="subtitle">CHEERS TO US</div>
+
+  <div class="env-wrap" id="env" onclick="openLetter()">
+    <div class="envelope">
+      <div class="letter">
+        <h2 style="font-family:'Sacramento',cursive;font-size:2.6rem;margin-top:0">
+          My Love,
+        </h2>
+        <p>
+          You thought this was just a personality test—but the truth is,
+          the only thing I wanted to measure was how lucky I am to have you.
+        </p>
+        <p>
+          These months with you have been my favorite chapter.
+          Thank you for loving me, choosing me, and being my home.
+        </p>
+        <p style="font-family:'Sacramento',cursive;font-size:2rem">
+          Always yours,<br>[Your Name]
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="gallery">
+    <div class="polaroid"><img src="1.jpg"></div>
+    <div class="polaroid"><img src="2.jpg"></div>
+    <div class="polaroid"><img src="3.jpg"></div>
+
+    <div class="polaroid">
+      <video onclick="playVid(this)">
+        <source src="vid1.mp4" type="video/mp4">
+      </video>
+      <div class="video-label">Tap to play</div>
     </div>
 
-    <div id="surprise-screen">
-        <h1 class="main-title">Happy Anniversary</h1>
-        <p class="sub-title">CHEERS TO US AND OUR JOURNEY TOGETHER</p>
-
-        <div class="env-wrapper" id="env-box" onclick="openAll()">
-            <div class="envelope">
-                <div class="letter">
-                    <h2 style="font-family: 'Sacramento', cursive; font-size: 2.5rem; margin-top: 0;">My Dearest,</h2>
-                    <p>I know you were expecting a personality type, but the only "type" I care about is you. Thank you for being my partner, my best friend, and my greatest adventure.</p>
-                    <p>Every single day with you is a gift, and I wanted to make something special to remind you of how much these months have meant to me. You make life so much brighter just by being in it.</p>
-                    <p>I love you more than any test could ever measure. Happy Anniversary, my love!</p>
-                    <p style="font-family: 'Sacramento', cursive; font-size: 2rem;">Always yours, <br> [Your Name]</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="gallery">
-            <div class="polaroid"><img src="1.jpg" alt="Memory 1"></div>
-            <div class="polaroid"><img src="2.jpg" alt="Memory 2"></div>
-            <div class="polaroid"><img src="3.jpg" alt="Memory 3"></div>
-            
-            <div class="polaroid">
-                <video id="v1" onclick="togglePlay(this)">
-                    <source src="vid1.mp4" type="video/mp4">
-                </video>
-                <div class="video-label">Tap to Play Video 1</div>
-            </div>
-            <div class="polaroid">
-                <video id="v2" onclick="togglePlay(this)">
-                    <source src="vid2.mp4" type="video/mp4">
-                </video>
-                <div class="video-label">Tap to Play Video 2</div>
-            </div>
-        </div>
+    <div class="polaroid">
+      <video onclick="playVid(this)">
+        <source src="vid2.mp4" type="video/mp4">
+      </video>
+      <div class="video-label">Tap to play</div>
     </div>
+  </div>
+</div>
 
-    <audio id="bg-music" src="music.mp3" loop></audio>
+<audio id="music" src="music.mp3" loop></audio>
 
-    <script>
-        function nextStep(step, progress) {
-            document.querySelectorAll('.quiz-card').forEach(card => card.style.display = 'none');
-            document.getElementById('q' + (step === 3 ? '3' : step)).style.display = 'block';
-            document.getElementById('progress').style.width = progress;
-        }
+<script>
+function next(n,percent){
+  document.querySelectorAll('.card').forEach(c=>c.style.display='none');
+  document.getElementById('q'+n).style.display='block';
+  document.getElementById('bar').style.width=percent+'%';
+}
 
-        function revealSurprise() {
-            document.getElementById('mbti-container').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('mbti-container').style.display = 'none';
-                const surprise = document.getElementById('surprise-screen');
-                surprise.style.display = 'block';
-                setTimeout(() => surprise.style.opacity = '1', 50);
-            }, 600);
-        }
+function reveal(){
+  document.getElementById('mbti').style.display='none';
+  const s=document.getElementById('surprise');
+  s.style.display='block';
+  setTimeout(()=>s.style.opacity=1,50);
+}
 
-        function openAll() {
-            const env = document.getElementById('env-box');
-            const music = document.getElementById('bg-music');
-            if (!env.classList.contains('open')) {
-                env.classList.add('open');
-                music.play().catch(() => console.log("Audio needs interaction"));
-            }
-        }
+function openLetter(){
+  const e=document.getElementById('env');
+  if(!e.classList.contains('open')){
+    e.classList.add('open');
+    document.getElementById('music').play();
+  }
+}
 
-        function togglePlay(video) {
-            // Unmute and play on first click
-            video.muted = false;
-            if (video.paused) {
-                video.play();
-            } else {
-                video.pause();
-            }
-        }
-    </script>
+function playVid(v){
+  v.muted=false;
+  v.paused ? v.play() : v.pause();
+}
+</script>
+
 </body>
 </html>
