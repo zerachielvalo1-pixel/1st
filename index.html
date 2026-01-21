@@ -190,3 +190,39 @@ document.querySelectorAll(".next").forEach(btn => {
         document.getElementById("q" + step).classList.add("hidden");
         step++;
         document.getElementById("q" + step).classList.remove("hidden");
+    });
+});
+
+// finish quiz
+document.querySelectorAll("#finish").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.getElementById("q3").classList.add("hidden");
+        document.getElementById("loading").classList.remove("hidden");
+
+        setTimeout(() => {
+            document.getElementById("quiz").classList.add("hidden");
+            document.getElementById("final").classList.remove("hidden");
+            document.getElementById("musicBtn").classList.remove("hidden");
+        }, 2500);
+    });
+});
+
+// music toggle
+const music = document.getElementById("bgm");
+const musicBtn = document.getElementById("musicBtn");
+let playing = false;
+
+musicBtn.addEventListener("click", () => {
+    if (!playing) {
+        music.play();
+        musicBtn.textContent = "⏸ Pause Music";
+    } else {
+        music.pause();
+        musicBtn.textContent = "▶ Play Music";
+    }
+    playing = !playing;
+});
+</script>
+
+</body>
+</html>
