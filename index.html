@@ -3,52 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MBTI Personality Insights 2026</title>
+    <title>MBTI Personality Quiz 2026</title>
     <style>
-        :root { --mbti-blue: #4a90e2; --romance-pink: #ff4d6d; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-        .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 500px; text-align: center; }
-        .hidden { display: none; }
-        
-        /* MBTI Style */
-        .mbti-header { color: var(--mbti-blue); border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px; }
-        .q-text { font-size: 1.1rem; margin-bottom: 20px; color: #333; }
-        .option-btn { display: block; width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--mbti-blue); background: white; color: var(--mbti-blue); border-radius: 5px; cursor: pointer; transition: 0.3s; }
-        .option-btn:hover { background: var(--mbti-blue); color: white; }
-
-        /* Reveal Style */
-        .reveal-theme { color: var(--romance-pink); }
-        .letter { line-height: 1.6; text-align: left; color: #444; margin-top: 20px; }
-        .gallery img { width: 100%; border-radius: 10px; margin-top: 15px; border: 4px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        #loading { font-style: italic; color: #888; }
+        body { font-family: 'Helvetica', sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 90%; max-width: 450px; text-align: center; }
+        .hidden { display: none !important; }
+        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #4a90e2; background: transparent; color: #4a90e2; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        .btn:hover { background: #4a90e2; color: white; }
+        .progress { font-size: 12px; color: #888; margin-bottom: 20px; }
+        h1, h2 { color: #333; }
+        #reveal-page { color: #ff4d6d; }
+        .photo-frame { width: 100%; border-radius: 15px; margin-top: 20px; border: 5px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .heart { font-size: 50px; color: #ff4d6d; }
     </style>
 </head>
 <body>
 
-    <div class="card" id="quiz-container">
-        <div class="mbti-header">
-            <h2 id="header-title">MBTI Personality Test</h2>
-            <small>Estimated time: 1 minute</small>
+    <div class="container">
+        <div id="step1">
+            <div class="progress">Question 1 of 3</div>
+            <h2>How do you usually recharge?</h2>
+            <button class="btn" onclick="goToStep(1, 2)">Spending time with friends</button>
+            <button class="btn" onclick="goToStep(1, 2)">Staying home with a book</button>
         </div>
 
-        <div id="q1">
-            <p class="q-text">1. At a social event, do you usually find yourself...</p>
-            <button class="option-btn" onclick="nextStep('q1', 'q2')">Interacting with many people</button>
-            <button class="option-btn" onclick="nextStep('q1', 'q2')">Talking to a few people you know</button>
+        <div id="step2" class="hidden">
+            <div class="progress">Question 2 of 3</div>
+            <h2>In life, you usually follow your...</h2>
+            <button class="btn" onclick="goToStep(2, 3)">Heart and Emotions</button>
+            <button class="btn" onclick="goToStep(2, 3)">Logic and Facts</button>
         </div>
 
-        <div id="q2" class="hidden">
-            <p class="q-text">2. Which describes you better when making decisions?</p>
-            <button class="option-btn" onclick="nextStep('q2', 'q3')">Logical and objective analysis</button>
-            <button class="option-btn" onclick="nextStep('q2', 'q3')">Consideration of others' feelings</button>
-        </div>
-
-        <div id="q3" class="hidden">
-            <p class="q-text">3. How do you feel about the last 30 days of your life?</p>
-            <button class="option-btn" onclick="startLoading()">They've been pretty average</button>
-            <button class="option-btn" onclick="startLoading()">They've been the best month ever</button>
+        <div id="step3" class="hidden">
+            <div class="progress">Question 3 of 3</div>
+            <h2>Which describes your last month?</h2>
+            <button class="btn" onclick="startLoading()">Exciting and new</button>
+            <button class="btn" onclick="startLoading()">Quiet and peaceful</button>
         </div>
 
         <div id="loading" class="hidden">
-            <p>Analyzing responses...</p>
-            <p>Matching with personality
+            <h2 id="loading-text">Calculating Personality Type...</h2>
+            <p>Please wait...</p>
+        </div>
+
+        <div id="reveal-page" class="hidden">
+            <div class="heart">❤️</div>
+            <h1>Gotcha!</h1>
+            <h2>Happy 1st Monthsary!</h2>
+            <div style="text-align: left; color: #555; line-height: 1.6;">
+                <p>Hey love, I know you were expecting a personality type, but the truth is, my favorite "type" is you.</p>
+                <p>Happy 1st month! I'm so glad we've made it this far, and I can't wait for many more memories with you.</p>
+            </div>
+            <img src="photo1.jpg" class="photo-frame" alt="Our Picture">
+        </div>
+    </div>
+
+    <script>
+        function goToStep(current, next) {
+            // Hide the current step
+            document.getElementById('step' + current).classList.add('hidden');
+            // Show the next step
+            document.getElementById('step' + next).classList.remove('hidden');
+        }
+
+        function startLoading() {
+            document.getElementById('step3').classList.add('hidden');
+            document.getElementById('loading').classList.remove('hidden');
+
+            // Wait 2 seconds, then show the surprise
+            setTimeout(function() {
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('reveal-page').classList.remove('hidden');
+                document.body.style.backgroundColor = "#fff0f3"; // Change background to romantic pink
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
