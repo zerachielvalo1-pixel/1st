@@ -3,44 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Surprise for You ❤️</title>
+    <title>MBTI Personality Insights 2026</title>
     <style>
-        body { font-family: 'Arial', sans-serif; background-color: #fff0f3; text-align: center; color: #ff4d6d; padding: 50px; }
+        :root { --mbti-blue: #4a90e2; --romance-pink: #ff4d6d; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 500px; text-align: center; }
         .hidden { display: none; }
-        .btn { background-color: #ff4d6d; color: white; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer; font-size: 1.2rem; }
-        .letter-container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .gallery img { width: 90%; max-width: 300px; margin: 10px; border-radius: 10px; border: 5px solid white; }
-        h1 { font-size: 2.5rem; }
+        
+        /* MBTI Style */
+        .mbti-header { color: var(--mbti-blue); border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px; }
+        .q-text { font-size: 1.1rem; margin-bottom: 20px; color: #333; }
+        .option-btn { display: block; width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--mbti-blue); background: white; color: var(--mbti-blue); border-radius: 5px; cursor: pointer; transition: 0.3s; }
+        .option-btn:hover { background: var(--mbti-blue); color: white; }
+
+        /* Reveal Style */
+        .reveal-theme { color: var(--romance-pink); }
+        .letter { line-height: 1.6; text-align: left; color: #444; margin-top: 20px; }
+        .gallery img { width: 100%; border-radius: 10px; margin-top: 15px; border: 4px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        #loading { font-style: italic; color: #888; }
     </style>
 </head>
 <body>
 
-    <div id="step1">
-        <h1>Hey you! ❤️</h1>
-        <p>I made something small to celebrate our 1st month.</p>
-        <button class="btn" onclick="showNext()">Click to Open</button>
-    </div>
-
-    <div id="step2" class="hidden">
-        <div class="letter-container">
-            <h1>Happy 1 Month!</h1>
-            <p>Dear [Her Name],</p>
-            <p>[Write your heartfelt letter here! Talk about your favorite memory from the last 30 days.]</p>
-            <p>Always yours, <br> [Your Name]</p>
+    <div class="card" id="quiz-container">
+        <div class="mbti-header">
+            <h2 id="header-title">MBTI Personality Test</h2>
+            <small>Estimated time: 1 minute</small>
         </div>
 
-        <div class="gallery">
-            <h3>Our Memories</h3>
-            <img src="photo1.jpg" alt="Us">
-            <img src="photo2.jpg" alt="Us">
+        <div id="q1">
+            <p class="q-text">1. At a social event, do you usually find yourself...</p>
+            <button class="option-btn" onclick="nextStep('q1', 'q2')">Interacting with many people</button>
+            <button class="option-btn" onclick="nextStep('q1', 'q2')">Talking to a few people you know</button>
         </div>
-    </div>
 
-    <script>
-        function showNext() {
-            document.getElementById('step1').classList.add('hidden');
-            document.getElementById('step2').classList.remove('hidden');
-        }
-    </script>
-</body>
-</html>
+        <div id="q2" class="hidden">
+            <p class="q-text">2. Which describes you better when making decisions?</p>
+            <button class="option-btn" onclick="nextStep('q2', 'q3')">Logical and objective analysis</button>
+            <button class="option-btn" onclick="nextStep('q2', 'q3')">Consideration of others' feelings</button>
+        </div>
+
+        <div id="q3" class="hidden">
+            <p class="q-text">3. How do you feel about the last 30 days of your life?</p>
+            <button class="option-btn" onclick="startLoading()">They've been pretty average</button>
+            <button class="option-btn" onclick="startLoading()">They've been the best month ever</button>
+        </div>
+
+        <div id="loading" class="hidden">
+            <p>Analyzing responses...</p>
+            <p>Matching with personality
