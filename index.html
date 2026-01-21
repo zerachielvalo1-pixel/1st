@@ -1,228 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MBTI Personality Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTI Personality Assessment</title>
+    <style>
+        :root {
+            --mbti-purple: #6c5ce7;
+            --love-pink: #ff7675;
+        }
 
-<style>
-body {
-    margin: 0;
-    font-family: "Segoe UI", Arial, sans-serif;
-    background: #f2f4f8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-/* SHARED */
-.hidden { display: none; }
-.card {
-    background: white;
-    width: 90%;
-    max-width: 460px;
-    padding: 30px;
-    border-radius: 18px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-    text-align: center;
-}
-button {
-    width: 100%;
-    padding: 14px;
-    margin: 10px 0;
-    font-size: 16px;
-    border-radius: 10px;
-    border: 2px solid #4a90e2;
-    background: white;
-    color: #4a90e2;
-    cursor: pointer;
-}
-button:hover {
-    background: #4a90e2;
-    color: white;
-}
-.progress {
-    font-size: 12px;
-    color: #888;
-    margin-bottom: 15px;
-}
+        /* MBTI QUIZ STYLING */
+        #quiz-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
 
-/* FINAL PAGE */
-.final {
-    background: linear-gradient(180deg, #fff0f3, #ffe5ec);
-    padding-bottom: 40px;
-}
-.hero img {
-    width: 90%;
-    max-width: 420px;
-    border-radius: 20px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-    margin-top: 30px;
-}
-.letter {
-    background: rgba(255,255,255,0.95);
-    padding: 30px;
-    margin: 30px auto;
-    border-radius: 20px;
-    line-height: 1.8;
-    max-width: 700px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-}
-.letter h2 {
-    text-align: center;
-    color: #ff4d6d;
-}
-.collage {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 15px;
-    max-width: 700px;
-    margin: auto;
-}
-.collage img {
-    width: 100%;
-    border-radius: 15px;
-    transform: rotate(var(--r));
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-}
-.music-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #ff4d6d;
-    color: white;
-    border: none;
-    border-radius: 50px;
-    padding: 12px 18px;
-    cursor: pointer;
-}
-</style>
+        .question { margin-bottom: 30px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        button.opt {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button.opt:hover { border-color: var(--mbti-purple); background: #f3f0ff; }
+        .hidden { display: none !important; }
+
+        /* SURPRISE PAGE STYLING */
+        #surprise-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+            background: #fff5f5;
+        }
+
+        /* ENVELOPE ANIMATION */
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            height: 200px;
+            width: 300px;
+            background: #ff7675;
+            margin-top: 50px;
+        }
+        .envelope-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 0; z-index: 2;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #ff4757;
+            transition: transform 0.5s ease;
+            transform-origin: top;
+        }
+        .envelope-wrapper.open::before { transform: rotateX(180deg); }
+        
+        #letter {
+            position: absolute;
+            bottom: 0; left: 10px; right: 10px;
+            height: 0;
+            background: white;
+            transition: 0.8s ease;
+            padding: 0 20px;
+            overflow: hidden;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+            z-index: 1;
+        }
+        .envelope-wrapper.open #letter {
+            height: 400px;
+            bottom: 100px;
+            padding: 20px;
+        }
+
+        /* MEDIA GRID */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 600px;
+            margin-top: 450px; /* Space for the popped-up letter */
+        }
+        .gallery img, .gallery video {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+    </style>
 </head>
-
 <body>
 
-<!-- MUSIC -->
-<audio id="bgm" loop>
-    <source src="music.mp3" type="audio/mpeg">
-</audio>
-<button class="music-btn hidden" id="musicBtn">▶ Play Music</button>
-
-<!-- MBTI QUIZ -->
-<div class="card" id="quiz">
-
-    <div id="q1">
-        <div class="progress">Question 1 of 3</div>
-        <h3>You feel energized when you…</h3>
-        <button class="next">Spend time with people</button>
-        <button class="next">Spend time alone</button>
+    <div id="quiz-card">
+        <h2 style="color: var(--mbti-purple)">Personality Test</h2>
+        <p>Step 3 of 3: Final Analysis</p>
+        <hr>
+        <div class="question">
+            <p>Do you prefer spending time in large groups or small intimate circles?</p>
+            <div class="options">
+                <button class="opt" onclick="nextQuestion()">Large Groups</button>
+                <button class="opt" onclick="nextQuestion()">Small Circles</button>
+            </div>
+        </div>
+        <button id="result-btn" class="hidden" style="background:var(--mbti-purple); color:white; border:none; padding:15px 30px; border-radius:5px; cursor:pointer;" onclick="showSurprise()">Click for Results</button>
     </div>
 
-    <div id="q2" class="hidden">
-        <div class="progress">Question 2 of 3</div>
-        <h3>You trust more in…</h3>
-        <button class="next">Facts and logic</button>
-        <button class="next">Feelings and intuition</button>
+    <div id="surprise-container">
+        <h1>Happy Monthsary, My Love! ❤️</h1>
+        <p>Your "MBTI" result is: <b>The Best Partner in the World</b></p>
+
+        <div class="envelope-wrapper" id="envelope" onclick="openLetter()">
+            <div id="letter">
+                <h3>To My Dearest,</h3>
+                <p>Insert your long, heartfelt letter here. Tell them how much you love them and how much these months have meant to you.</p>
+                <p>Every day with you is a blessing.</p>
+                <p>Love always, <br> [Your Name]</p>
+            </div>
+        </div>
+
+        <div class="gallery">
+            <img src="photo1.jpg" alt="Our Memory 1">
+            <img src="photo2.jpg" alt="Our Memory 2">
+            <img src="photo3.jpg" alt="Our Memory 3">
+            <img src="photo4.jpg" alt="Our Memory 4">
+            
+            <video src="video1.mp4" controls poster="thumb1.jpg"></video>
+            <video src="video2.mp4" controls poster="thumb2.jpg"></video>
+        </div>
     </div>
 
-    <div id="q3" class="hidden">
-        <div class="progress">Question 3 of 3</div>
-        <h3>Your last month has been…</h3>
-        <button id="finish">The best one yet</button>
-        <button id="finish">Pretty meaningful</button>
-    </div>
+    <audio id="bg-music" src="music.mp3" loop></audio>
 
-    <div id="loading" class="hidden">
-        <h3>Calculating your MBTI type…</h3>
-        <p>Please wait</p>
-    </div>
+    <script>
+        function nextQuestion() {
+            document.querySelector('.question').classList.add('hidden');
+            document.getElementById('result-btn').classList.remove('hidden');
+        }
 
-</div>
+        function showSurprise() {
+            document.getElementById('quiz-card').style.display = 'none';
+            document.getElementById('surprise-container').style.display = 'flex';
+        }
 
-<!-- FINAL PAGE -->
-<div id="final" class="hidden final">
-
-    <div class="hero" style="text-align:center;">
-        <img src="main.jpg" alt="Us">
-    </div>
-
-    <div class="letter">
-        <h2>Happy 1st Monthsary ❤️</h2>
-
-        <p>
-            <!-- ✏️ WRITE YOUR LONG MESSAGE HERE -->
-            I know you thought this was just an MBTI test,
-            but I wanted to surprise you with something more meaningful.
-            This past month with you has been something I’ll always treasure.
-        </p>
-
-        <p>
-            Every laugh, every conversation, every little moment
-            has made my days brighter. Thank you for being you,
-            and for choosing me.
-        </p>
-
-        <p>
-            Here’s to many more months together.
-        </p>
-
-        <p>
-            Always yours,<br>
-            <strong>[Your Name]</strong>
-        </p>
-    </div>
-
-    <div class="collage">
-        <img src="photo1.jpg" style="--r:-4deg">
-        <img src="photo2.jpg" style="--r:3deg">
-        <img src="photo3.jpg" style="--r:-2deg">
-        <img src="photo4.jpg" style="--r:4deg">
-    </div>
-
-</div>
-
-<script>
-let step = 1;
-
-// advance quiz
-document.querySelectorAll(".next").forEach(btn => {
-    btn.addEventListener("click", () => {
-        document.getElementById("q" + step).classList.add("hidden");
-        step++;
-        document.getElementById("q" + step).classList.remove("hidden");
-    });
-});
-
-// finish quiz
-document.querySelectorAll("#finish").forEach(btn => {
-    btn.addEventListener("click", () => {
-        document.getElementById("q3").classList.add("hidden");
-        document.getElementById("loading").classList.remove("hidden");
-
-        setTimeout(() => {
-            document.getElementById("quiz").classList.add("hidden");
-            document.getElementById("final").classList.remove("hidden");
-            document.getElementById("musicBtn").classList.remove("hidden");
-        }, 2500);
-    });
-});
-
-// music toggle
-const music = document.getElementById("bgm");
-const musicBtn = document.getElementById("musicBtn");
-let playing = false;
-
-musicBtn.addEventListener("click", () => {
-    if (!playing) {
-        music.play();
-        musicBtn.textContent = "⏸ Pause Music";
-    } else {
-        music.pause();
-        musicBtn.textContent = "▶ Play Music";
-    }
-    playing = !playing;
-});
-</script>
-
+        function openLetter() {
+            const env = document.getElementById('envelope');
+            const music = document.getElementById('bg-music');
+            
+            if (!env.classList.contains('open')) {
+                env.classList.add('open');
+                music.play().catch(e => console.log("Audio requires interaction first"));
+            }
+        }
+    </script>
 </body>
 </html>
