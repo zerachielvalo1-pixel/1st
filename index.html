@@ -4,14 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Personality Assessment</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Sacramento&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
     --blue:#4298b4;
     --brown:#8b6d45;
-    --cream:#f4eee8;
+    --cream:#fdfaf6;
 }
 
 body{
@@ -19,6 +18,7 @@ body{
     font-family:'Montserrat',sans-serif;
     background:#fff;
     color:#333;
+    overflow-x: hidden;
 }
 
 /* ---------- MBTI QUIZ ---------- */
@@ -62,115 +62,76 @@ body{
     background:#f2f9fb;
 }
 
-/* ---------- SURPRISE ---------- */
+/* ---------- SURPRISE SECTION (HIDDEN BY DEFAULT) ---------- */
 #surprise{
     display:none;
     opacity:0;
     transition:1.5s;
-    background:
-      linear-gradient(rgba(139,109,69,.9),rgba(139,109,69,.95)),
-      url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+    background: linear-gradient(rgba(139,109,69,.9),rgba(139,109,69,.95)),
+                url('https://www.transparenttextures.com/patterns/paper-fibers.png');
     min-height:100vh;
     padding:80px 20px;
     text-align:center;
 }
 
-h1{
-    font-family:'Sacramento',cursive;
-    font-size:4.5rem;
-    color:#fff;
-    margin-bottom:10px;
-}
-.subtitle{
-    color:var(--cream);
-    letter-spacing:4px;
-    margin-bottom:60px;
-}
+h1{ font-family:'Sacramento',cursive; font-size:4.5rem; color:#fff; margin-bottom:10px; }
+.subtitle{ color:var(--cream); letter-spacing:4px; margin-bottom:60px; }
 
 /* ---------- LOVE CARD ---------- */
 .love-card{
-    max-width:900px;
-    margin:0 auto 120px;
+    max-width:1100px;
+    margin:0 auto 60px;
     background:#fffdfa;
-    padding:70px 90px;
+    padding:50px;
     box-shadow:0 25px 50px rgba(0,0,0,.25);
-    text-align:left;
 }
-    .love-layout{
+
+.love-layout{
     display:grid;
-    grid-template-columns:200px 1fr 200px;
-    gap:40px;
-    align-items:flex-start;
+    grid-template-columns: 180px 1fr 180px;
+    gap:30px;
+    align-items: flex-start;
 }
 
-.side-photos{
-    display:flex;
-    flex-direction:column;
-    gap:25px;
-}
-
+/* Film Strip Side Photos */
 .side-photos {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    max-height: 700px; /* adjust to fit the letter height */
+    gap: 15px;
+    max-height: 800px;
     overflow-y: auto;
     padding-right: 5px;
 }
+.side-photos::-webkit-scrollbar { width: 4px; }
+.side-photos::-webkit-scrollbar-thumb { background: var(--brown); }
 
-
-/* Responsive */
-@media(max-width:900px){
-    .love-layout{
-        grid-template-columns:1fr;
-    }
-    .side-photos{
-        flex-direction:row;
-        justify-content:center;
-        flex-wrap:wrap;
-    }
-    .side-photos img{
-        width:45%;
-        height:200px;
-    }
+.side-photos img {
+    width: 100%;
+    border: 5px solid #000;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    filter: sepia(0.2);
 }
 
-.love-card h2{
-    font-family:'Sacramento',cursive;
-    font-size:3rem;
-    color:var(--brown);
-}
-.love-card p{
-    font-family:'Cormorant Garamond',serif;
-    font-size:1.4rem;
-    line-height:1.9;
-}
+.letter-text{ text-align: left; padding: 0 20px; }
+.letter-text h2{ font-family:'Sacramento',cursive; font-size:3.5rem; color:var(--brown); margin-top:0;}
+.letter-text p{ font-family:'Cormorant Garamond',serif; font-size:1.3rem; line-height:1.8; }
 
-/* ---------- PHOTOS ---------- */
+/* ---------- BOTTOM PHOTO GRID ---------- */
 .photo-grid{
     max-width:1100px;
-    margin:0 auto 80px;
+    margin:60px auto;
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
     gap:35px;
 }
 .polaroid{
     background:#fff;
-    padding:15px 15px 55px;
+    padding:15px 15px 50px;
     box-shadow:0 15px 30px rgba(0,0,0,.25);
-    transform:rotate(-2deg);
 }
-.polaroid:nth-child(even){
-    transform:rotate(2deg);
-}
-.polaroid img{
-    width:100%;
-    height:300px;
-    object-fit:cover;
-    display:block;
-}
+.polaroid img{ width:100%; height:300px; object-fit:cover; display:block; }
 
-/* ---------- VIDEO WINDOWS ---------- */
+/* ---------- VIDEOS ---------- */
 .video-window{
     max-width:900px;
     margin:0 auto;
@@ -178,169 +139,85 @@ h1{
     grid-template-columns:1fr 1fr;
     gap:40px;
 }
-.video-frame{
-    background:#fff;
-    padding:15px;
-    box-shadow:0 20px 40px rgba(0,0,0,.35);
-}
-.video-frame video{
-    width:100%;
-    height:320px;
-    object-fit:cover;
-    cursor:pointer;
-    display:block;
-}
+.video-frame{ background:#fff; padding:15px; box-shadow:0 20px 40px rgba(0,0,0,.35); }
+.video-frame video{ width:100%; height:320px; object-fit:cover; cursor:pointer; display:block; }
 
-@media(max-width:768px){
-    .video-window{
-        grid-template-columns:1fr;
-    }
+/* Responsive */
+@media(max-width:1000px){
+    .love-layout{ grid-template-columns: 1fr; }
+    .side-photos{ flex-direction: row; overflow-x: auto; max-height: none; }
+    .side-photos img { width: 150px; }
 }
 </style>
 </head>
 <body>
 
-<!-- QUIZ -->
-<div id="quiz" style="position: relative; z-index: 10;">
+<div id="quiz">
     <h3 style="color:var(--blue);letter-spacing:3px;">PERSONALITY TEST</h3>
     <div class="progress"><span id="bar"></span></div>
 
     <div class="card" id="q1">
         <p>Do you prefer focusing on details or big-picture ideas?</p>
-        <button class="option" onclick="next(2,'25%')">Details</button>
-        <button class="option" onclick="next(2,'25%')">Big Picture</button>
+        <button class="option" onclick="next(2,'30%')">Details</button>
+        <button class="option" onclick="next(2,'30%')">Big Picture</button>
     </div>
 
     <div class="card" id="q2" style="display:none;">
         <p>When deciding, do you follow logic or feelings?</p>
-        <button class="option" onclick="next(3,'50%')">Logic</button>
-        <button class="option" onclick="next(3,'50%')">Feelings</button>
+        <button class="option" onclick="next(3,'60%')">Logic</button>
+        <button class="option" onclick="next(3,'60%')">Feelings</button>
     </div>
 
     <div class="card" id="q3" style="display:none;">
         <p>Sino mas pogi?</p>
-        <button class="option" onclick="next(4,'75%')">Mark</button>
-        <button class="option" onclick="next(4,'75%')">Adrianne</button>
+        <button class="option" onclick="next(4,'90%')">Mark</button>
+        <button class="option" onclick="next(4,'90%')">Adrianne</button>
     </div>
 
     <div class="card" id="q4" style="display:none;">
-        <p>Your personality profile is ready. Ready to see your surprise?</p>
+        <p>Your personality profile is ready.</p>
         <button class="option" style="background:var(--blue);color:#fff" onclick="reveal()">View Results</button>
     </div>
 </div>
 
-<!-- SURPRISE -->
-<div id="surprise" style="display:none; opacity:0; z-index: 5;">
-    <!-- the entire surprise content goes here -->
-</div>
+<div id="surprise">
+    <h1>Happy 1st Monthsary beb :></h1>
+    <p class="subtitle">code gods lang</p>
 
-<script>
-function next(n,w){
-    document.querySelectorAll('.card').forEach(c=>c.style.display='none');
-    document.getElementById('q'+n).style.display='block';
-    document.getElementById('bar').style.width=w;
-}
+    <div class="love-card">
+        <div class="love-layout">
+            <div class="side-photos">
+                <img src="side1.jpg"><img src="side2.jpg"><img src="side3.jpg">
+                <img src="side4.jpg"><img src="side5.jpg"><img src="side6.jpg"><img src="side7.jpg">
+            </div>
 
-function reveal(){
-    quiz.style.opacity='0';
-    setTimeout(()=>{
-        quiz.style.display='none';
-        surprise.style.display='block';
-        setTimeout(()=>surprise.style.opacity='1',50);
-        music.play();
-    },700);
-}
-</script>
+            <div class="letter-text">
+                <h2>Beb,</h2>
+                <p>Alam natin both na hindi naging madali ang rs natin, and I know that more than anyone. There were days when everything felt heavy, when the world moved too fast...</p>
+                <p>Thank you for choosing each other, again and again.</p>
+                <p>I love you — now and always.</p>
+                <p style="font-family:'Sacramento',cursive;font-size:2.2rem;">Always yours,<br>Ianne</p>
+            </div>
 
-
-  <!-- LOVE CARD -->
-<div class="love-card">
-  <h2>Beb,</h2>
-
-  <div class="love-layout">
-
-    <!-- LEFT PHOTOS (7 images) -->
-    <div class="side-photos">
-      <img src="side1.jpg" alt="">
-      <img src="side2.jpg" alt="">
-      <img src="side3.jpg" alt="">
-      <img src="side4.jpg" alt="">
-      <img src="side5.jpg" alt="">
-      <img src="side6.jpg" alt="">
-      <img src="side7.jpg" alt="">
+            <div class="side-photos">
+                <img src="side8.jpg"><img src="side9.jpg"><img src="side10.jpg">
+                <img src="side11.jpg"><img src="side12.jpg"><img src="side13.jpg"><img src="side14.jpg">
+            </div>
+        </div>
     </div>
 
-    <!-- LETTER -->
-    <div class="letter-text">
-      <p>
-        Alam natin both na hindi naging madali ang rs natin, and I know that more than anyone. There were days when everything felt heavy, when the world moved too fast, and when you had to be strong even when you were tired of being strong. You carried responsibilities, worries, and quiet battles that no one else could see. And yet, you still showed up — for life, for ur friends, and for us.
-      </p>
-      <p>
-        I admire you deeply for that. For every moment you doubted yourself but kept going anyway. For every time you smiled even when things weren’t okay. For the nights we felt overwhelmed and the mornings we still chose to try again. Those moments matter. They don’t go unnoticed, especially by me.
-      </p>
-      <p>
-        There were challenges this year that tested your patience, your confidence, and your heart. There were setbacks that made you question if you were doing enough or being enough. But through it all, you kept moving forward, not perfectly, not easily, but honestly. And that kind of strength is rare and beautiful.
-      </p>
-      <p>
-        Thank you for trusting me during the hard days. Thank you for letting me see you when you were vulnerable, when you were unsure, when you were scared. Loving you in those moments means more to me than loving you in the easy ones. Those are the moments that made our bond real and unbreakable.
-      </p>
-      <p>
-        If this year taught us anything, it’s that love doesn’t mean everything is always okay. It means choosing each other even when things are messy. It means holding on when letting go feels easier. And I’m so grateful that we chose each other, again and again.
-      </p>
-      <p>
-        Habang papatagal us ng papatagal, I want you to remember this: you are not behind, you are not weak, and you are not alone. You’ve grown in ways that don’t always show on the surface, but I see them. I see how far you’ve come. And I’m so proud of you — not just for surviving this year, but for becoming even more you because of it.
-      </p>
-      <p>
-        No matter what comes next, I’m here. For the good days, the quiet days, and the hard ones too. Always with you. Always choosing you.
-      </p>
-      <p>I love you — now and always.</p>
-      <p style="font-family:'Sacramento',cursive;font-size:2.2rem;">
-        Always yours,<br>Ianne
-      </p>
-    </div>
-
-    <!-- RIGHT PHOTOS (7 images) -->
-    <div class="side-photos">
-      <img src="side8.jpg" alt="">
-      <img src="side9.jpg" alt="">
-      <img src="side10.jpg" alt="">
-      <img src="side11.jpg" alt="">
-      <img src="side12.jpg" alt="">
-      <img src="side13.jpg" alt="">
-      <img src="side14.jpg" alt="">
-    </div>
-
-  </div>
-</div>
-
-
-    </div>
-</div>
-
-
-    <!-- PHOTOS -->
     <div class="photo-grid">
         <div class="polaroid"><img src="1.jpg"></div>
         <div class="polaroid"><img src="2.jpg"></div>
         <div class="polaroid"><img src="3.jpg"></div>
     </div>
 
-    <!-- VIDEOS (WINDOW STYLE) -->
     <div class="video-window">
-        <div class="video-frame">
-            <video onclick="toggle(this)">
-                <source src="vid1.mp4" type="video/mp4">
-            </video>
-        </div>
-        <div class="video-frame">
-            <video onclick="toggle(this)">
-                <source src="vid2.mp4" type="video/mp4">
-            </video>
-        </div>
+        <div class="video-frame"><video onclick="toggle(this)"><source src="vid1.mp4"></video></div>
+        <div class="video-frame"><video onclick="toggle(this)"><source src="vid2.mp4"></video></div>
     </div>
-</div>
 
-<audio id="music" src="music.mp3" loop></audio>
+</div> <audio id="music" src="music.mp3" loop></audio>
 
 <script>
 function next(n,w){
@@ -348,15 +225,21 @@ function next(n,w){
     document.getElementById('q'+n).style.display='block';
     document.getElementById('bar').style.width=w;
 }
+
 function reveal(){
-    quiz.style.opacity='0';
+    const q = document.getElementById('quiz');
+    const s = document.getElementById('surprise');
+    const m = document.getElementById('music');
+    
+    q.style.opacity='0';
     setTimeout(()=>{
-        quiz.style.display='none';
-        surprise.style.display='block';
-        setTimeout(()=>surprise.style.opacity='1',50);
-        music.play();
+        q.style.display='none';
+        s.style.display='block';
+        setTimeout(()=> s.style.opacity='1', 50);
+        m.play();
     },700);
 }
+
 function toggle(v){
     v.muted=false;
     v.paused ? v.play() : v.pause();
