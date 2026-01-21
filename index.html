@@ -27,4 +27,134 @@ body {
 
 .container {
     max-width: 700px;
-    mar
+    margin: auto;
+    padding: 30px 20px;
+}
+
+.letter {
+    background: rgba(255,255,255,0.9);
+    padding: 30px;
+    border-radius: 20px;
+    line-height: 1.8;
+    font-size: 17px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.letter h2 {
+    text-align: center;
+    color: #ff4d6d;
+    margin-bottom: 20px;
+}
+
+.collage {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+}
+
+.collage img {
+    width: 100%;
+    border-radius: 15px;
+    transform: rotate(var(--r));
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: #ff4d6d;
+    font-size: 20px;
+}
+
+.music-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #ff4d6d;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+</style>
+</head>
+
+<body>
+
+<!-- MUSIC -->
+<audio id="bgm" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+<button class="music-btn" onclick="toggleMusic()">▶ Play Music</button>
+
+<!-- MAIN PHOTO -->
+<div class="hero">
+    <img src="main.jpg" alt="Us">
+</div>
+
+<!-- LETTER -->
+<div class="container">
+    <div class="letter">
+        <h2>Happy 1st Monthsary ❤️</h2>
+
+        <p>
+            <!-- ✏️ WRITE YOUR MESSAGE HERE -->
+            I don’t even know where to start, but I know I want you to know
+            how much this past month has meant to me.
+            Every little moment, every laugh, every conversation—
+            they’ve all become my favorite memories.
+        </p>
+
+        <p>
+            This is just one month, but it already feels special in a way
+            I never expected. Thank you for choosing me, for staying,
+            and for being you.
+        </p>
+
+        <p>
+            I can’t wait for more months, more memories,
+            and more moments with you.
+        </p>
+
+        <p>
+            Always yours,<br>
+            <strong>[Your Name]</strong>
+        </p>
+    </div>
+
+    <!-- PHOTO COLLAGE -->
+    <div class="collage">
+        <img src="photo1.jpg" style="--r:-4deg">
+        <img src="photo2.jpg" style="--r:3deg">
+        <img src="photo3.jpg" style="--r:-2deg">
+        <img src="photo4.jpg" style="--r:4deg">
+    </div>
+</div>
+
+<div class="footer">
+    ❤️ I love you ❤️
+</div>
+
+<script>
+let playing = false;
+const music = document.getElementById("bgm");
+
+function toggleMusic() {
+    if (!playing) {
+        music.play();
+        playing = true;
+        document.querySelector(".music-btn").innerText = "⏸ Pause Music";
+    } else {
+        music.pause();
+        playing = false;
+        document.querySelector(".music-btn").innerText = "▶ Play Music";
+    }
+}
+</script>
+
+</body>
+</html>
