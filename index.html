@@ -1,1 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Surprise for You ❤️</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #fff0f3; text-align: center; color: #ff4d6d; padding: 50px; }
+        .hidden { display: none; }
+        .btn { background-color: #ff4d6d; color: white; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer; font-size: 1.2rem; }
+        .letter-container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .gallery img { width: 90%; max-width: 300px; margin: 10px; border-radius: 10px; border: 5px solid white; }
+        h1 { font-size: 2.5rem; }
+    </style>
+</head>
+<body>
 
+    <div id="step1">
+        <h1>Hey you! ❤️</h1>
+        <p>I made something small to celebrate our 1st month.</p>
+        <button class="btn" onclick="showNext()">Click to Open</button>
+    </div>
+
+    <div id="step2" class="hidden">
+        <div class="letter-container">
+            <h1>Happy 1 Month!</h1>
+            <p>Dear [Her Name],</p>
+            <p>[Write your heartfelt letter here! Talk about your favorite memory from the last 30 days.]</p>
+            <p>Always yours, <br> [Your Name]</p>
+        </div>
+
+        <div class="gallery">
+            <h3>Our Memories</h3>
+            <img src="photo1.jpg" alt="Us">
+            <img src="photo2.jpg" alt="Us">
+        </div>
+    </div>
+
+    <script>
+        function showNext() {
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
