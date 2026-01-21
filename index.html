@@ -3,282 +3,242 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MBTI® Personality Assessment</title>
+<title>Personality Assessment</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Sacramento&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Sacramento&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --mbti:#4298b4;
-  --brown:#8b6d45;
-  --cream:#f4eee8;
+    --blue:#4298b4;
+    --brown:#8b6d45;
+    --cream:#f4eee8;
 }
 
-body,html{
-  margin:0;
-  padding:0;
-  font-family:'Montserrat',sans-serif;
-  background:#fff;
+body{
+    margin:0;
+    font-family:'Montserrat',sans-serif;
+    background:#fff;
+    color:#333;
 }
 
-/* ===== MBTI QUIZ ===== */
-#mbti{
-  max-width:600px;
-  margin:70px auto;
-  padding:20px;
-  text-align:center;
+/* ---------- MBTI QUIZ ---------- */
+#quiz{
+    max-width:600px;
+    margin:80px auto;
+    text-align:center;
+    transition:.8s;
 }
-
-.logo{
-  color:var(--mbti);
-  letter-spacing:3px;
-  font-weight:600;
-  margin-bottom:20px;
-}
-
 .progress{
-  height:8px;
-  background:#eee;
-  border-radius:10px;
-  overflow:hidden;
-  margin-bottom:30px;
+    height:8px;
+    background:#eee;
+    border-radius:20px;
+    overflow:hidden;
+    margin:30px 0;
 }
-.progress div{
-  height:100%;
-  width:0%;
-  background:var(--mbti);
-  transition:.4s;
+.progress span{
+    display:block;
+    height:100%;
+    width:10%;
+    background:var(--blue);
+    transition:.4s;
 }
-
 .card{
-  background:#fafafa;
-  padding:40px;
-  border-radius:15px;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
+    background:#fff;
+    border-radius:16px;
+    padding:40px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
 }
-
 .option{
-  width:100%;
-  padding:15px;
-  margin:10px 0;
-  border-radius:8px;
-  border:1px solid #ddd;
-  background:#fff;
-  cursor:pointer;
-  font-size:1rem;
+    width:100%;
+    padding:14px;
+    margin:10px 0;
+    border:1px solid #ddd;
+    background:#fff;
+    border-radius:8px;
+    cursor:pointer;
 }
-.option:hover{border-color:var(--mbti);}
+.option:hover{
+    border-color:var(--blue);
+    background:#f2f9fb;
+}
 
-/* ===== SURPRISE ===== */
+/* ---------- SURPRISE ---------- */
 #surprise{
-  display:none;
-  opacity:0;
-  transition:opacity 1.5s;
-  min-height:100vh;
-  background:linear-gradient(rgba(139,109,69,.9),rgba(139,109,69,.95)),
-  url("https://www.transparenttextures.com/patterns/paper-fibers.png");
-  padding:80px 20px;
-  text-align:center;
+    display:none;
+    opacity:0;
+    transition:1.5s;
+    background:
+      linear-gradient(rgba(139,109,69,.9),rgba(139,109,69,.95)),
+      url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+    min-height:100vh;
+    padding:80px 20px;
+    text-align:center;
 }
 
 h1{
-  font-family:'Sacramento',cursive;
-  font-size:4.5rem;
-  color:white;
-  margin-bottom:10px;
+    font-family:'Sacramento',cursive;
+    font-size:4.5rem;
+    color:#fff;
+    margin-bottom:10px;
 }
 .subtitle{
-  color:var(--cream);
-  letter-spacing:4px;
-  margin-bottom:70px;
+    color:var(--cream);
+    letter-spacing:4px;
+    margin-bottom:60px;
 }
 
-/* ===== ENVELOPE ===== */
-.env-wrap{
-  width:380px;
-  height:230px;
-  margin:0 auto 140px;
-  perspective:1500px;
-  cursor:pointer;
+/* ---------- LOVE CARD ---------- */
+.love-card{
+    max-width:900px;
+    margin:0 auto 120px;
+    background:#fffdfa;
+    padding:70px 90px;
+    box-shadow:0 25px 50px rgba(0,0,0,.25);
+    text-align:left;
 }
-.envelope{
-  width:100%;
-  height:100%;
-  background:#e0d5c8;
-  position:relative;
-  box-shadow:0 20px 40px rgba(0,0,0,.3);
+.love-card h2{
+    font-family:'Sacramento',cursive;
+    font-size:3rem;
+    color:var(--brown);
 }
-.envelope::before{
-  content:"";
-  position:absolute;
-  top:0;
-  border-left:190px solid transparent;
-  border-right:190px solid transparent;
-  border-top:130px solid #d4c4b5;
-  transform-origin:top;
-  transition:.6s;
-}
-.env-wrap.open .envelope::before{
-  transform:rotateX(180deg);
+.love-card p{
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.4rem;
+    line-height:1.9;
 }
 
-/* LETTER (WIDE) */
-.letter{
-  position:absolute;
-  bottom:10px;
-  left:50%;
-  transform:translateX(-50%);
-  width:620px;
-  max-width:95vw;
-  height:190px;
-  background:#fffdfa;
-  padding:45px;
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.4rem;
-  line-height:1.6;
-  overflow-y:auto;
-  box-shadow:0 10px 25px rgba(0,0,0,.2);
-  transition:.9s;
-}
-.env-wrap.open .letter{
-  transform:translate(-50%,-170px);
-  height:460px;
-}
-
-/* ===== GALLERY ===== */
-.gallery{
-  max-width:1100px;
-  margin:200px auto 0;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-  gap:35px;
+/* ---------- PHOTOS ---------- */
+.photo-grid{
+    max-width:1100px;
+    margin:0 auto 80px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:35px;
 }
 .polaroid{
-  background:#fff;
-  padding:15px 15px 55px;
-  box-shadow:0 15px 30px rgba(0,0,0,.25);
-  transform:rotate(-2deg);
+    background:#fff;
+    padding:15px 15px 55px;
+    box-shadow:0 15px 30px rgba(0,0,0,.25);
+    transform:rotate(-2deg);
 }
-.polaroid:nth-child(even){transform:rotate(2deg);}
-.polaroid img,
-.polaroid video{
-  width:100%;
-  height:320px;
-  object-fit:cover;
+.polaroid:nth-child(even){
+    transform:rotate(2deg);
 }
-.video-label{
-  margin-top:10px;
-  font-size:.8rem;
-  color:#666;
-  text-transform:uppercase;
+.polaroid img{
+    width:100%;
+    height:300px;
+    object-fit:cover;
+    display:block;
 }
-video{cursor:pointer;}
+
+/* ---------- VIDEO WINDOWS ---------- */
+.video-window{
+    max-width:900px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+}
+.video-frame{
+    background:#fff;
+    padding:15px;
+    box-shadow:0 20px 40px rgba(0,0,0,.35);
+}
+.video-frame video{
+    width:100%;
+    height:320px;
+    object-fit:cover;
+    cursor:pointer;
+    display:block;
+}
+
+@media(max-width:768px){
+    .video-window{
+        grid-template-columns:1fr;
+    }
+}
 </style>
 </head>
-
 <body>
 
-<!-- MBTI -->
-<div id="mbti">
-  <div class="logo">PERSONALITY ASSESSMENT</div>
-  <div class="progress"><div id="bar"></div></div>
+<!-- QUIZ -->
+<div id="quiz">
+    <h3 style="color:var(--blue);letter-spacing:3px;">PERSONALITY TEST</h3>
+    <div class="progress"><span id="bar"></span></div>
 
-  <div class="card" id="q1">
-    <h3>Question 1</h3>
-    <p>Do you gain energy from people or from time alone?</p>
-    <button class="option" onclick="next(2,33)">People</button>
-    <button class="option" onclick="next(2,33)">Time alone</button>
-  </div>
+    <div class="card" id="q1">
+        <p>Do you prefer focusing on details or big-picture ideas?</p>
+        <button class="option" onclick="next(2,'40%')">Details</button>
+        <button class="option" onclick="next(2,'40%')">Big Picture</button>
+    </div>
 
-  <div class="card" id="q2" style="display:none">
-    <h3>Question 2</h3>
-    <p>Do you trust logic more than emotions?</p>
-    <button class="option" onclick="next(3,66)">Logic</button>
-    <button class="option" onclick="next(3,66)">Emotions</button>
-  </div>
+    <div class="card" id="q2" style="display:none;">
+        <p>When deciding, do you follow logic or feelings?</p>
+        <button class="option" onclick="next(3,'70%')">Logic</button>
+        <button class="option" onclick="next(3,'70%')">Feelings</button>
+    </div>
 
-  <div class="card" id="q3" style="display:none">
-    <h3>Final Step</h3>
-    <p>Your personality type is ready.</p>
-    <button class="option" style="background:var(--mbti);color:#fff"
-      onclick="reveal()">View Results</button>
-  </div>
+    <div class="card" id="q3" style="display:none;">
+        <p>Your personality profile is ready.</p>
+        <button class="option" style="background:var(--blue);color:#fff" onclick="reveal()">View Results</button>
+    </div>
 </div>
 
 <!-- SURPRISE -->
 <div id="surprise">
-  <h1>Happy Monthsary</h1>
-  <div class="subtitle">CHEERS TO US</div>
+    <h1>Happy Monthsary</h1>
+    <p class="subtitle">FOR US & OUR STORY</p>
 
-  <div class="env-wrap" id="env" onclick="openLetter()">
-    <div class="envelope">
-      <div class="letter">
-        <h2 style="font-family:'Sacramento',cursive;font-size:2.6rem;margin-top:0">
-          My Love,
-        </h2>
-        <p>
-          You thought this was just a personality test—but the truth is,
-          the only thing I wanted to measure was how lucky I am to have you.
-        </p>
-        <p>
-          These months with you have been my favorite chapter.
-          Thank you for loving me, choosing me, and being my home.
-        </p>
-        <p style="font-family:'Sacramento',cursive;font-size:2rem">
-          Always yours,<br>[Your Name]
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <div class="gallery">
-    <div class="polaroid"><img src="1.jpg"></div>
-    <div class="polaroid"><img src="2.jpg"></div>
-    <div class="polaroid"><img src="3.jpg"></div>
-
-    <div class="polaroid">
-      <video onclick="playVid(this)">
-        <source src="vid1.mp4" type="video/mp4">
-      </video>
-      <div class="video-label">Tap to play</div>
+    <div class="love-card">
+        <h2>My Love,</h2>
+        <p>This was never really a personality test. Loving you has been the easiest thing I’ve ever done.</p>
+        <p>Thank you for every moment, every laugh, and every memory we’ve shared. These months with you mean everything to me.</p>
+        <p>I love you — now and always.</p>
+        <p style="font-family:'Sacramento',cursive;font-size:2.2rem;">Always yours,<br>[Your Name]</p>
     </div>
 
-    <div class="polaroid">
-      <video onclick="playVid(this)">
-        <source src="vid2.mp4" type="video/mp4">
-      </video>
-      <div class="video-label">Tap to play</div>
+    <!-- PHOTOS -->
+    <div class="photo-grid">
+        <div class="polaroid"><img src="1.jpg"></div>
+        <div class="polaroid"><img src="2.jpg"></div>
+        <div class="polaroid"><img src="3.jpg"></div>
     </div>
-  </div>
+
+    <!-- VIDEOS (WINDOW STYLE) -->
+    <div class="video-window">
+        <div class="video-frame">
+            <video onclick="toggle(this)">
+                <source src="vid1.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-frame">
+            <video onclick="toggle(this)">
+                <source src="vid2.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
 </div>
 
 <audio id="music" src="music.mp3" loop></audio>
 
 <script>
-function next(n,percent){
-  document.querySelectorAll('.card').forEach(c=>c.style.display='none');
-  document.getElementById('q'+n).style.display='block';
-  document.getElementById('bar').style.width=percent+'%';
+function next(n,w){
+    document.querySelectorAll('.card').forEach(c=>c.style.display='none');
+    document.getElementById('q'+n).style.display='block';
+    document.getElementById('bar').style.width=w;
 }
-
 function reveal(){
-  document.getElementById('mbti').style.display='none';
-  const s=document.getElementById('surprise');
-  s.style.display='block';
-  setTimeout(()=>s.style.opacity=1,50);
+    quiz.style.opacity='0';
+    setTimeout(()=>{
+        quiz.style.display='none';
+        surprise.style.display='block';
+        setTimeout(()=>surprise.style.opacity='1',50);
+        music.play();
+    },700);
 }
-
-function openLetter(){
-  const e=document.getElementById('env');
-  if(!e.classList.contains('open')){
-    e.classList.add('open');
-    document.getElementById('music').play();
-  }
-}
-
-function playVid(v){
-  v.muted=false;
-  v.paused ? v.play() : v.pause();
+function toggle(v){
+    v.muted=false;
+    v.paused ? v.play() : v.pause();
 }
 </script>
 
