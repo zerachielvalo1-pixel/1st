@@ -201,38 +201,57 @@ h1{
 <body>
 
 <!-- QUIZ -->
-<div id="quiz">
+<div id="quiz" style="position: relative; z-index: 10;">
     <h3 style="color:var(--blue);letter-spacing:3px;">PERSONALITY TEST</h3>
     <div class="progress"><span id="bar"></span></div>
 
     <div class="card" id="q1">
         <p>Do you prefer focusing on details or big-picture ideas?</p>
-        <button class="option" onclick="next(2,'40%')">Details</button>
-        <button class="option" onclick="next(2,'40%')">Big Picture</button>
+        <button class="option" onclick="next(2,'25%')">Details</button>
+        <button class="option" onclick="next(2,'25%')">Big Picture</button>
     </div>
 
     <div class="card" id="q2" style="display:none;">
         <p>When deciding, do you follow logic or feelings?</p>
-        <button class="option" onclick="next(3,'70%')">Logic</button>
-        <button class="option" onclick="next(3,'70%')">Feelings</button>
-    </div>
-
-    <div class="card" id="q2" style="display:none;">
-        <p>Sino mas pogi?</p>
-        <button class="option" onclick="next(3,'70%')">Mark</button>
-        <button class="option" onclick="next(3,'70%')">Adrianne</button>
+        <button class="option" onclick="next(3,'50%')">Logic</button>
+        <button class="option" onclick="next(3,'50%')">Feelings</button>
     </div>
 
     <div class="card" id="q3" style="display:none;">
-        <p>Your personality profile is ready.</p>
+        <p>Sino mas pogi?</p>
+        <button class="option" onclick="next(4,'75%')">Mark</button>
+        <button class="option" onclick="next(4,'75%')">Adrianne</button>
+    </div>
+
+    <div class="card" id="q4" style="display:none;">
+        <p>Your personality profile is ready. Ready to see your surprise?</p>
         <button class="option" style="background:var(--blue);color:#fff" onclick="reveal()">View Results</button>
     </div>
 </div>
 
 <!-- SURPRISE -->
-<div id="surprise">
-    <h1>Happy 1st Monthsary beb :></h1>
-    <p class="subtitle">code gods lang</p>
+<div id="surprise" style="display:none; opacity:0; z-index: 5;">
+    <!-- the entire surprise content goes here -->
+</div>
+
+<script>
+function next(n,w){
+    document.querySelectorAll('.card').forEach(c=>c.style.display='none');
+    document.getElementById('q'+n).style.display='block';
+    document.getElementById('bar').style.width=w;
+}
+
+function reveal(){
+    quiz.style.opacity='0';
+    setTimeout(()=>{
+        quiz.style.display='none';
+        surprise.style.display='block';
+        setTimeout(()=>surprise.style.opacity='1',50);
+        music.play();
+    },700);
+}
+</script>
+
 
   <!-- LOVE CARD -->
 <div class="love-card">
