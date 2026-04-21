@@ -12,6 +12,8 @@
     --blue:#4298b4;
     --brown:#8b6d45;
     --cream:#f4eee8;
+    --rose:#b4426a;
+    --deep:#5a2d42;
 }
 
 body{
@@ -56,23 +58,82 @@ body{
     background:#fff;
     border-radius:8px;
     cursor:pointer;
+    font-family:'Montserrat',sans-serif;
+    font-size:1rem;
 }
 .option:hover{
     border-color:var(--blue);
     background:#f2f9fb;
 }
 
-/* ---------- SURPRISE ---------- */
+/* ---------- SURPRISE WRAPPER ---------- */
 #surprise{
     display:none;
     opacity:0;
     transition:1.5s;
-    background:
-      linear-gradient(rgba(139,109,69,.9),rgba(139,109,69,.95)),
-      url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+    min-height:100vh;
+}
+
+/* ---------- PAGE PANELS ---------- */
+.page-panel{
+    display:none;
     min-height:100vh;
     padding:80px 20px;
     text-align:center;
+}
+.page-panel.active{
+    display:block;
+}
+
+#page1{
+    background:
+      linear-gradient(rgba(139,109,69,.9),rgba(139,109,69,.95)),
+      url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+}
+#page2{
+    background:
+      linear-gradient(rgba(90,45,66,.9),rgba(90,45,66,.95)),
+      url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+}
+
+/* ---------- TOGGLE NAV ---------- */
+.month-nav{
+    position:fixed;
+    top:24px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:0;
+    z-index:100;
+    box-shadow:0 4px 20px rgba(0,0,0,.3);
+    border-radius:40px;
+    overflow:hidden;
+}
+.month-btn{
+    padding:10px 28px;
+    border:none;
+    cursor:pointer;
+    font-family:'Montserrat',sans-serif;
+    font-size:.75rem;
+    letter-spacing:2px;
+    font-weight:600;
+    transition:.3s;
+}
+.month-btn.m1{
+    background:var(--brown);
+    color:#fff;
+}
+.month-btn.m1.inactive{
+    background:rgba(139,109,69,.4);
+    color:rgba(255,255,255,.6);
+}
+.month-btn.m2{
+    background:var(--rose);
+    color:#fff;
+}
+.month-btn.m2.inactive{
+    background:rgba(180,66,106,.4);
+    color:rgba(255,255,255,.6);
 }
 
 h1{
@@ -85,6 +146,7 @@ h1{
     color:var(--cream);
     letter-spacing:4px;
     margin-bottom:60px;
+    font-size:.8rem;
 }
 
 /* ---------- LOVE CARD ---------- */
@@ -96,19 +158,17 @@ h1{
     box-shadow:0 25px 50px rgba(0,0,0,.25);
     text-align:left;
 }
-    .love-layout{
+.love-layout{
     display:grid;
     grid-template-columns:200px 1fr 200px;
     gap:40px;
     align-items:flex-start;
 }
-
 .side-photos{
     display:flex;
     flex-direction:column;
     gap:25px;
 }
-
 .side-photos img{
     width:100%;
     height:260px;
@@ -117,8 +177,6 @@ h1{
     background:#fff;
     padding:10px;
 }
-
-/* Responsive */
 @media(max-width:900px){
     .love-layout{
         grid-template-columns:1fr;
@@ -132,12 +190,17 @@ h1{
         width:45%;
         height:200px;
     }
+    .love-card{
+        padding:40px 24px;
+    }
 }
-
 .love-card h2{
     font-family:'Sacramento',cursive;
     font-size:3rem;
     color:var(--brown);
+}
+#page2 .love-card h2{
+    color:var(--rose);
 }
 .love-card p{
     font-family:'Cormorant Garamond',serif;
@@ -189,7 +252,6 @@ h1{
     cursor:pointer;
     display:block;
 }
-
 @media(max-width:768px){
     .video-window{
         grid-template-columns:1fr;
@@ -216,101 +278,112 @@ h1{
         <button class="option" onclick="next(3,'70%')">Feelings</button>
     </div>
 
-    <div class="card" id="q2" style="display:none;">
-        <p>Sino mas pogi?</p>
-        <button class="option" onclick="next(3,'70%')">Mark</button>
-        <button class="option" onclick="next(3,'70%')">Adrianne</button>
-    </div>
-
     <div class="card" id="q3" style="display:none;">
         <p>Your personality profile is ready.</p>
-        <button class="option" style="background:var(--blue);color:#fff" onclick="reveal()">View Results</button>
+        <button class="option" style="background:var(--blue);color:#fff;font-family:'Montserrat',sans-serif;" onclick="reveal()">View Results</button>
     </div>
 </div>
 
 <!-- SURPRISE -->
 <div id="surprise">
-    <h1>Happy 1st Monthsary beb :></h1>
-    <p class="subtitle">code gods lang</p>
 
-    <div class="love-card">
-    <h2>Beb,</h2>
+    <!-- MONTH TOGGLE NAV -->
+    <nav class="month-nav" id="monthNav" style="display:none;">
+        <button class="month-btn m1" id="btn1" onclick="showPage(1)">1ST MONTH</button>
+        <button class="month-btn m2 inactive" id="btn2" onclick="showPage(2)">2ND MONTH</button>
+    </nav>
 
-    <div class="love-layout">
+    <!-- PAGE 1 — 1st Monthsary -->
+    <div class="page-panel active" id="page1">
+        <h1>Happy 1st Monthsary beb :></h1>
+        <p class="subtitle">code gods lang</p>
 
-        <!-- LEFT PHOTOS -->
-        <div class="side-photos">
-            <img src="side1.jpg">
-            <img src="side2.jpg">
+        <div class="love-card">
+            <h2>Beb,</h2>
+            <div class="love-layout">
+                <div class="side-photos">
+                    <img src="side1.jpg">
+                    <img src="side2.jpg">
+                </div>
+                <div class="letter-text">
+                    <p>Alam natin both na hindi naging madali ang rs natin, and I know that more than anyone. There were days when everything felt heavy, when the world moved too fast, and when you had to be strong even when you were tired of being strong. You carried responsibilities, worries, and quiet battles that no one else could see. And yet, you still showed up — for life, for ur friends, and for us.</p>
+                    <p>I admire you deeply for that. For every moment you doubted yourself but kept going anyway. For every time you smiled even when things weren't okay. For the nights we felt overwhelmed and the mornings we still chose to try again. Those moments matter. They don't go unnoticed, especially by me.</p>
+                    <p>There were challenges this year that tested your patience, your confidence, and your heart. There were setbacks that made you question if you were doing enough or being enough. But through it all, you kept moving forward, not perfectly, not easily, but honestly. And that kind of strength is rare and beautiful.</p>
+                    <p>Thank you for trusting me during the hard days. Thank you for letting me see you when you were vulnerable, when you were unsure, when you were scared. Loving you in those moments means more to me than loving you in the easy ones. Those are the moments that made our bond real and unbreakable.</p>
+                    <p>If this year taught us anything, it's that love doesn't mean everything is always okay. It means choosing each other even when things are messy. It means holding on when letting go feels easier. And I'm so grateful that we chose each other, again and again.</p>
+                    <p>Habang papatagal us ng papatagal, I want you to remember this: you are not behind, you are not weak, and you are not alone. You've grown in ways that don't always show on the surface, but I see them. I see how far you've come. And I'm so proud of you — not just for surviving this year, but for becoming even more you because of it.</p>
+                    <p>No matter what comes next, I'm here. For the good days, the quiet days, and the hard ones too. Always with you. Always choosing you.</p>
+                    <p>I love you — now and always.</p>
+                    <p style="font-family:'Sacramento',cursive;font-size:2.2rem;">Always yours,<br>Ianne</p>
+                </div>
+                <div class="side-photos">
+                    <img src="side3.jpg">
+                    <img src="side4.jpg">
+                </div>
+            </div>
         </div>
 
-        <!-- LETTER -->
-        <div class="letter-text">
-            <p>
-Alam natin both na hindi naging madali ang rs natin, and I know that more than anyone. There were days when everything felt heavy, when the world moved too fast, and when you had to be strong even when you were tired of being strong. You carried responsibilities, worries, and quiet battles that no one else could see. And yet, you still showed up — for life, for ur friends, and for us.
-            </p>
-
-            <p>
-I admire you deeply for that. For every moment you doubted yourself but kept going anyway. For every time you smiled even when things weren’t okay. For the nights we felt overwhelmed and the mornings we still chose to try again. Those moments matter. They don’t go unnoticed, especially by me.
-            </p>
-
-            <p>
-There were challenges this year that tested your patience, your confidence, and your heart. There were setbacks that made you question if you were doing enough or being enough. But through it all, you kept moving forward, not perfectly, not easily, but honestly. And that kind of strength is rare and beautiful.
-            </p>
-
-            <p>
-Thank you for trusting me during the hard days. Thank you for letting me see you when you were vulnerable, when you were unsure, when you were scared. Loving you in those moments means more to me than loving you in the easy ones. Those are the moments that made our bond real and unbreakable.
-            </p>
-
-            <p>
-If this year taught us anything, it’s that love doesn’t mean everything is always okay. It means choosing each other even when things are messy. It means holding on when letting go feels easier. And I’m so grateful that we chose each other, again and again.
-            </p>
-
-            <p>
-Habang papatagal us ng papatagal, I want you to remember this: you are not behind, you are not weak, and you are not alone. You’ve grown in ways that don’t always show on the surface, but I see them. I see how far you’ve come. And I’m so proud of you — not just for surviving this year, but for becoming even more you because of it.
-            </p>
-
-            <p>
-No matter what comes next, I’m here. For the good days, the quiet days, and the hard ones too. Always with you. Always choosing you.
-            </p>
-
-            <p>I love you — now and always.</p>
-
-            <p style="font-family:'Sacramento',cursive;font-size:2.2rem;">
-Always yours,<br>Ianne
-            </p>
+        <div class="photo-grid">
+            <div class="polaroid"><img src="1.jpg"></div>
+            <div class="polaroid"><img src="2.jpg"></div>
+            <div class="polaroid"><img src="3.jpg"></div>
         </div>
 
-        <!-- RIGHT PHOTOS -->
-        <div class="side-photos">
-            <img src="side3.jpg">
-            <img src="side4.jpg">
-        </div>
-
-    </div>
-</div>
-
-
-    <!-- PHOTOS -->
-    <div class="photo-grid">
-        <div class="polaroid"><img src="1.jpg"></div>
-        <div class="polaroid"><img src="2.jpg"></div>
-        <div class="polaroid"><img src="3.jpg"></div>
-    </div>
-
-    <!-- VIDEOS (WINDOW STYLE) -->
-    <div class="video-window">
-        <div class="video-frame">
-            <video onclick="toggle(this)">
-                <source src="vid1.mp4" type="video/mp4">
-            </video>
-        </div>
-        <div class="video-frame">
-            <video onclick="toggle(this)">
-                <source src="vid2.mp4" type="video/mp4">
-            </video>
+        <div class="video-window">
+            <div class="video-frame">
+                <video onclick="toggle(this)"><source src="vid1.mp4" type="video/mp4"></video>
+            </div>
+            <div class="video-frame">
+                <video onclick="toggle(this)"><source src="vid2.mp4" type="video/mp4"></video>
+            </div>
         </div>
     </div>
+
+    <!-- PAGE 2 — 2nd Monthsary -->
+    <div class="page-panel" id="page2">
+        <h1>Happy 2nd Monthsary beb :></h1>
+        <p class="subtitle">dalawang buwan na tayo</p>
+
+        <div class="love-card">
+            <h2>Beb,</h2>
+            <div class="love-layout">
+                <div class="side-photos">
+                    <img src="side2a.jpg">
+                    <img src="side2b.jpg">
+                </div>
+                <div class="letter-text">
+                    <p>Dalawang buwan na. It doesn't sound like a lot, but I know — we know — how much has happened in those two months. How much we've laughed, how much we've figured out, and how much closer we've become. Every single day added up to something I didn't even know I was looking for.</p>
+                    <p>I keep thinking about the small things. The random conversations that went way too long. The moments where everything was quiet and it still felt full. The times you said something and I thought — yeah, this person gets me. Those moments don't just happen. They're built, slowly, and I'm so glad we're the ones building them.</p>
+                    <p>There's something different about month two. Month one is all butterflies and newness. But month two? That's when it starts becoming real. When you start seeing the real person behind the highlights, and still choosing to stay. And I choose you — not just the good version, but all the versions.</p>
+                    <p>I've seen you stressed. I've seen you tired. I've seen you overthink things at 2am. And I've also seen you light up when you talk about the things you love, when you laugh at something stupid, when you're just completely yourself. That version of you is my favorite.</p>
+                    <p>Two months in, and I still catch myself smiling at my phone because of you. Still thinking of you in random moments. Still grateful that somehow, out of everything, we found each other — and that we're still here, still trying, still choosing this.</p>
+                    <p>Here's to more months. More stupid jokes. More long nights. More of us figuring this out together. I don't know what's ahead but I know I want to face it with you.</p>
+                    <p>I love you more than last month. And next month, even more.</p>
+                    <p style="font-family:'Sacramento',cursive;font-size:2.2rem;">Always yours,<br>Ianne</p>
+                </div>
+                <div class="side-photos">
+                    <img src="side2c.jpg">
+                    <img src="side2d.jpg">
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-grid">
+            <div class="polaroid"><img src="m2_1.jpg"></div>
+            <div class="polaroid"><img src="m2_2.jpg"></div>
+            <div class="polaroid"><img src="m2_3.jpg"></div>
+        </div>
+
+        <div class="video-window">
+            <div class="video-frame">
+                <video onclick="toggle(this)"><source src="vid2a.mp4" type="video/mp4"></video>
+            </div>
+            <div class="video-frame">
+                <video onclick="toggle(this)"><source src="vid2b.mp4" type="video/mp4"></video>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <audio id="music" src="music.mp3" loop></audio>
@@ -322,13 +395,24 @@ function next(n,w){
     document.getElementById('bar').style.width=w;
 }
 function reveal(){
+    var quiz=document.getElementById('quiz');
+    var surprise=document.getElementById('surprise');
+    var nav=document.getElementById('monthNav');
     quiz.style.opacity='0';
     setTimeout(()=>{
         quiz.style.display='none';
         surprise.style.display='block';
+        nav.style.display='flex';
         setTimeout(()=>surprise.style.opacity='1',50);
-        music.play();
+        document.getElementById('music').play();
     },700);
+}
+function showPage(n){
+    document.querySelectorAll('.page-panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page'+n).classList.add('active');
+    document.getElementById('btn1').classList.toggle('inactive', n!==1);
+    document.getElementById('btn2').classList.toggle('inactive', n!==2);
+    window.scrollTo({top:0,behavior:'smooth'});
 }
 function toggle(v){
     v.muted=false;
